@@ -1,6 +1,6 @@
 ---
 title: "ETL with <FONT COLOR='#fff100'>Arrow</FONT> and <FONT COLOR='#fff100'>DuckDB</FONT>"
-author: "<FONT COLOR='#fff100'>Javier Orraca-Deatcu</FONT>"
+author: "<FONT COLOR='#fff100'>Javier Orraca-Deatcu</FONT><br><a href='https://rrr.is/ArrowHackathonTalk'>rrr.is/ArrowHackathonTalk</a>"
 subtitle: "SoCal RUG x UCI Hackathon - 2024.04.27"
 
 format: 
@@ -53,19 +53,17 @@ knitr: true
 [dplyr](https://dplyr.tidyverse.org/) for R \| [pandas](https://pandas.pydata.org/) for Python
 :::
 
-------------------------------------------------------------------------
+## {.center}
 
 ::: r-fit-text
 we need
 :::
 
-------------------------------------------------------------------------
+## {.center}
 
 ::: r-fit-text
 data!
 :::
-
-------------------------------------------------------------------------
 
 ## Palmer Penguins
 
@@ -461,8 +459,6 @@ penguins_mod = filtered.groupby('sex').agg(mean_mass_g=('body_mass_g', 'mean')).
 Arrow \| Learn more at <https://arrow.apache.org/>
 :::
 
-------------------------------------------------------------------------
-
 ## Larger-than-Memory Data
 
 <br> ![](images/apache_arrow.png)
@@ -617,11 +613,11 @@ nyc_taxi |>
 Arrow \| [Arrow + dplyr compatibility](https://r4ds.hadley.nz/arrow.html)
 :::
 
-------------------------------------------------------------------------
+##
 
 ![](images/crying_cat.gif){fig-align="center"}
 
-------------------------------------------------------------------------
+## {.center}
 
 ::: r-fit-text
 but wait!
@@ -630,8 +626,6 @@ but wait!
 ::: r-fit-text
 problem solved
 :::
-
-------------------------------------------------------------------------
 
 ## User Defined Functions `r hexes("arrow", "tidyverse", "dplyr", "stringr")`
 
@@ -721,7 +715,7 @@ nyc_taxi |>
 Arrow \| Learn more about registering Arrow [User Defined Functions ("UDFs")](https://arrow.apache.org/docs/r/reference/register_scalar_function.html)
 :::
 
-------------------------------------------------------------------------
+##
 
 ![](images/pokemon.gif)
 
@@ -766,8 +760,6 @@ Arrow Flight SQL \| Learn more at <https://arrow.apache.org/docs/format/FlightSq
 ::: footer
 duckplyr by DuckDB Labs \| Learn more at <https://duckdblabs.com/>
 :::
-
-------------------------------------------------------------------------
 
 ## DuckDB `r hexes_duckdb("duckdb")`
 
@@ -1074,10 +1066,8 @@ DuckDB Labs \| Learn more at <https://duckdblabs.com/>
 DuckDB Labs \| Learn more at <https://duckdblabs.com/>
 :::
 
-------------------------------------------------------------------------
+## {.center}
 
 ::: r-fit-text
 questions?
 :::
-
-------------------------------------------------------------------------
