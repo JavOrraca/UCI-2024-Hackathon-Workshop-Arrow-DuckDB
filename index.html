@@ -733,7 +733,7 @@ $ year              &lt;int&gt; 2009, 2008, 2008, 2008, 2007, 2007, 2008, 2008, 
 <div id="tabset-6-1">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15" data-code-line-numbers="1-4|2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a>penguins_mod <span class="ot">&lt;-</span> penguins_df <span class="sc">|&gt;</span> </span>
-<span id="cb15-2"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">body_mass_kg =</span> body_mass_g <span class="sc">*</span> <span class="dv">1000</span>)</span>
+<span id="cb15-2"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">body_mass_kg =</span> body_mass_g <span class="sc">/</span> <span class="dv">1000</span>)</span>
 <span id="cb15-3"><a href=""></a></span>
 <span id="cb15-4"><a href=""></a><span class="fu">glimpse</span>(penguins_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -747,14 +747,14 @@ $ flipper_length_mm &lt;int&gt; 181, 186, 195, NA, 193, 190, 181, 195, 193, 190,
 $ body_mass_g       &lt;int&gt; 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, …
 $ sex               &lt;fct&gt; male, female, female, NA, female, male, female, male…
 $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…
-$ body_mass_kg      &lt;dbl&gt; 3750000, 3800000, 3250000, NA, 3450000, 3650000, 362…</code></pre>
+$ body_mass_kg      &lt;dbl&gt; 3.750, 3.800, 3.250, NA, 3.450, 3.650, 3.625, 4.675,…</code></pre>
 </div>
 </div>
 </div>
 <div id="tabset-6-2">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href=""></a>penguins_mod <span class="op">=</span> penguins_df.assign(</span>
-<span id="cb17-2"><a href=""></a>    body_mass_kg <span class="op">=</span> penguins_df[<span class="st">'body_mass_g'</span>] <span class="op">*</span> <span class="dv">1000</span></span>
+<span id="cb17-2"><a href=""></a>    body_mass_kg <span class="op">=</span> penguins_df[<span class="st">'body_mass_g'</span>] <span class="op">/</span> <span class="dv">1000</span></span>
 <span id="cb17-3"><a href=""></a>)</span>
 <span id="cb17-4"><a href=""></a></span>
 <span id="cb17-5"><a href=""></a><span class="bu">print</span>(penguins_mod.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1513,6 +1513,35 @@ $ mean_mass_g &lt;dbl&gt; 3862.273</code></pre>
 <h2></h2>
 <div class="r-fit-text">
 <p>questions?</p>
+</div>
+</section></section>
+<section>
+<section id="bonus" class="title-slide slide level1 center">
+<h1>4. Bonus!</h1>
+
+</section>
+<section id="spatial-analysis" class="slide level2">
+<h2>Spatial Analysis</h2>
+<ul>
+<li>In Sep 2023, I attended a <em>Big Data in R with Arrow</em> workshop hosted by the amazing software devs and educators <a href="https://www.linkedin.com/in/stephanie-hazlitt/">Steph Hazlitt</a> &amp; <a href="https://www.linkedin.com/in/nicolacrane/">Nic Crane</a></li>
+</ul>
+<div class="fragment">
+<ul>
+<li>One of the neater capabilities of this workshop was the geospatial mapping capabilities that combine Arrow, DuckDB, ggplot2, and SF</li>
+</ul>
+<div class="footer">
+<p>posit::conf(2023) | <a href="https://posit-conf-2023.github.io/arrow/">Big Data in R with Arrow</a></p>
+</div>
+</div>
+</section>
+<section id="spatial-analysis-1" class="slide level2">
+<h2>Spatial Analysis</h2>
+<ul>
+<li>The link below contains a script from the <em>Big Data in R with Arrow</em> workshop that explores these packages and introduces an ultra-fast method for working with geospatial data and rendering maps <br></li>
+<li>Source: <a href="https://github.com/JavOrraca/UCI-2024-Hackathon-Workshop-Arrow-DuckDB/blob/main/Arrow_for_Spatial_Data.R">Arrow_for_Spatial_Data.R</a></li>
+</ul>
+<div class="footer">
+<p>posit::conf(2023) | <a href="https://posit-conf-2023.github.io/arrow/">Big Data in R with Arrow</a></p>
 </div>
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">

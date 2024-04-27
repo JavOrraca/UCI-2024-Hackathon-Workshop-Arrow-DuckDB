@@ -338,7 +338,7 @@ dplyr \| Learn more about [arrange()](https://dplyr.tidyverse.org/articles/dplyr
 #| echo: true
 #| code-line-numbers: "1-4|2"
 penguins_mod <- penguins_df |> 
-  mutate(body_mass_kg = body_mass_g * 1000)
+  mutate(body_mass_kg = body_mass_g / 1000)
 
 glimpse(penguins_mod)
 ```
@@ -349,7 +349,7 @@ glimpse(penguins_mod)
 #| eval: false
 #| echo: true
 penguins_mod = penguins_df.assign(
-    body_mass_kg = penguins_df['body_mass_g'] * 1000
+    body_mass_kg = penguins_df['body_mass_g'] / 1000
 )
 
 print(penguins_mod.head())
@@ -1088,4 +1088,28 @@ DuckDB Labs \| Learn more at <https://duckdblabs.com/>
 
 ::: r-fit-text
 questions?
+:::
+
+# 4. Bonus!
+
+## Spatial Analysis
+
+- In Sep 2023, I attended a _Big Data in R with Arrow_ workshop hosted by the amazing software devs and educators [Steph Hazlitt](https://www.linkedin.com/in/stephanie-hazlitt/) & [Nic Crane](https://www.linkedin.com/in/nicolacrane/)
+
+. . .
+
+- One of the neater capabilities of this workshop was the geospatial mapping capabilities that combine Arrow, DuckDB, ggplot2, and SF
+
+::: footer
+posit::conf(2023) \| [Big Data in R with Arrow](https://posit-conf-2023.github.io/arrow/)
+:::
+
+## Spatial Analysis
+
+- The link below contains a script from the _Big Data in R with Arrow_ workshop that explores these packages and introduces an ultra-fast method for working with geospatial data and rendering maps
+<br>
+- Source: [Arrow_for_Spatial_Data.R](https://github.com/JavOrraca/UCI-2024-Hackathon-Workshop-Arrow-DuckDB/blob/main/Arrow_for_Spatial_Data.R)
+
+::: footer
+posit::conf(2023) \| [Big Data in R with Arrow](https://posit-conf-2023.github.io/arrow/)
 :::
