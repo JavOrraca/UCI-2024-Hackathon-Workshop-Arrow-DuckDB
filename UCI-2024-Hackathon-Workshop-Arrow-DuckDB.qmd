@@ -1,0 +1,1075 @@
+---
+title: "ETL with <FONT COLOR='#fff100'>Arrow</FONT> and <FONT COLOR='#fff100'>DuckDB</FONT>"
+author: "<FONT COLOR='#fff100'>Javier Orraca-Deatcu</FONT>"
+subtitle: "SoCal RUG x UCI Hackathon - 2024.04.27"
+
+format: 
+  revealjs:
+    embed-resources: false
+    theme: [default, styling.scss]
+    title-slide-attributes:
+      data-background-image: images/SoCal_RUG_logo.png
+      data-background-size: 360px
+      data-background-position: bottom 50px right 50px
+      data-background-color: "#000000"
+eval: false
+revealjs-plugins:
+  - codewindow
+knitr: true
+---
+
+```{r}
+#| label: setup
+#| eval: true
+#| include: false
+#| file: setup.R
+```
+
+# 1. Data Manipulation
+
+## Clean ETL with R & Python
+
+### R's `dplyr`
+
+-   `dplyr` is a data manipulation package for R that offers SQL-like functions such as `select()`, `filter()`, `summarize()`, and more to simplify data tasks
+
+### Python's `pandas`
+
+-   `pandas` is a data analysis library in Python that supports the same kind of selecting, filtering, and manipulation tasks
+
+::: footer
+[dplyr](https://dplyr.tidyverse.org/) for R | [pandas](https://pandas.pydata.org/) for Python
+:::
+
+## Clean ETL with R & Python
+
+-   Both libraries are essential for data manipulation and are designed to be intuitive and performant
+
+. . .
+
+-   but first...
+
+::: footer
+[dplyr](https://dplyr.tidyverse.org/) for R | [pandas](https://pandas.pydata.org/) for Python
+:::
+
+------------------------------------------------------------------------
+  
+::: r-fit-text
+we need
+:::
+  
+------------------------------------------------------------------------
+
+::: r-fit-text
+data!
+:::
+  
+------------------------------------------------------------------------
+
+## Palmer Penguins
+
+![Artwork by Allison Horst | <https://allisonhorst.github.io/palmerpenguins>](images/lter_penguins.png){fig-alt="Artwork by Allison Horst"}
+
+::: footer
+`palmerpenguins` | Package available on [CRAN for R](https://dplyr.tidyverse.org/) and [PyPI for Python](https://pypi.org/project/palmerpenguins/)
+:::
+
+## Palmer Penguins
+
+-   The following slides show examples in R and Python that make use of the `palmerpenguins` package
+-   This data contains measurements for three penguin species observed from 2007-2009 on three islands in the Palmer Archipelago, Antarctica
+-   The data was collected by the [Palmer Station Long Term Ecological Research Program](https://pal.lternet.edu/), part of the [US Long Term Ecological Research Network](https://lternet.edu/)
+
+::: footer
+`palmerpenguins` | Package available on [CRAN for R](https://dplyr.tidyverse.org/) and [PyPI for Python](https://pypi.org/project/palmerpenguins/)
+:::
+
+## Palmer Penguins
+
+- Install `palmerpenguins` and load the curated data set
+
+. . .
+
+```{r}
+#| eval: true
+#| echo: false
+library(dplyr)
+
+
+library(palmerpenguins)
+
+penguins_df <- palmerpenguins::penguins
+```
+
+::: panel-tabset
+## R
+```{r}
+#| eval: false
+#| echo: true
+install.packages("palmerpenguins")
+
+library(palmerpenguins)
+
+penguins_df <- palmerpenguins::penguins
+```
+
+## Python
+```{python}
+#| eval: false
+#| echo: true
+pip install palmerpenguins
+
+from palmerpenguins import load_penguins
+
+penguins_df = load_penguins()
+```
+:::
+
+::: footer
+`palmerpenguins` | Package available on [CRAN for R](https://dplyr.tidyverse.org/) and [PyPI for Python](https://pypi.org/project/palmerpenguins/)
+:::
+
+## Take a `glimpse()` at the Data
+
+::: panel-tabset
+## R
+```{r}
+#| eval: true
+#| echo: true
+library(dplyr)
+
+glimpse(penguins_df)
+```
+
+## Python
+```{python}
+#| eval: false
+#| echo: true
+print(penguins_df.head())
+```
+
+```{python}
+#| echo: false
+print(penguins_df_py.head())
+```
+
+:::
+
+::: footer
+`palmerpenguins` | Package available on [CRAN for R](https://dplyr.tidyverse.org/) and [PyPI for Python](https://pypi.org/project/palmerpenguins/)
+:::
+
+## Functions We'll Explore
+
+::: columns
+::: {.column width="50%"}
+-   select
+-   filter
+-   arrange
+:::
+
+::: {.column width="50%"}
+-   mutate
+-   group_by
+-   summarize
+:::
+:::
+
+::: footer
+dplyr \| Learn more about [dplyr](https://dplyr.tidyverse.org/)
+:::
+
+## select
+
+- Subset _columns_ with the `select()` function
+
+. . .
+
+::: panel-tabset
+
+## R
+```{r}
+#| eval: true
+#| echo: true
+#| code-line-numbers: "1-4|2"
+penguins_mod <- penguins_df |> 
+  select(species, sex)
+
+glimpse(penguins_mod)
+```
+
+## Python
+```{python}
+#| eval: false
+#| echo: true
+import pandas as pd
+
+penguins_mod = penguins_df[['species', 'sex']]
+```
+:::
+
+::: footer
+dplyr \| Learn more about [select()](https://dplyr.tidyverse.org/articles/dplyr.html#select-columns-with-select)
+:::
+
+## select
+
+- Using the column (or "variable") names, `select()` let us easily subset the data
+
+![Image credit: Duke University <https://intro2r.library.duke.edu/wrangle.html>](images/select.svg)
+
+::: footer
+dplyr \| Learn more about [select()](https://dplyr.tidyverse.org/articles/dplyr.html#select-columns-with-select)
+:::
+
+## filter
+
+- Subset _rows_ with the `filter()` function
+
+. . .
+
+::: panel-tabset
+
+## R
+```{r}
+#| eval: true
+#| echo: true
+#| code-line-numbers: "1-5|2-3"
+penguins_mod <- penguins_df |> 
+  filter(sex == "female",
+         bill_length_mm <= 40)
+
+glimpse(penguins_mod)
+```
+
+## Python
+```{python}
+#| eval: false
+#| echo: true
+penguins_mod = penguins_df[
+    (penguins_df['sex'] == 'female') &
+    (penguins_df['bill_length_mm'] <= 40)
+]
+```
+:::
+
+::: footer
+dplyr \| Learn more about [filter()](https://dplyr.tidyverse.org/articles/dplyr.html#filter-rows-with-filter)
+:::
+
+## filter
+
+- The `filter()` function let's us keep rows where the provided expression(s) are `TRUE` 
+
+![Image credit: Duke University <https://intro2r.library.duke.edu/wrangle.html>](images/filter_by_rows.svg)
+
+::: footer
+dplyr \| Learn more about [filter()](https://dplyr.tidyverse.org/articles/dplyr.html#filter-rows-with-filter)
+:::
+
+## arrange
+
+- Sorting rows by column names can be accomplished with the `arrange()` function
+- In the example on the next slide, we'll sort the data by `bill_length_mm` ascending and by `year` descending
+
+::: footer
+dplyr \| Learn more about [arrange()](https://dplyr.tidyverse.org/articles/dplyr.html#arrange-rows-with-arrange)
+:::
+
+## arrange
+
+::: panel-tabset
+
+## R
+```{r}
+#| eval: true
+#| echo: true
+#| code-line-numbers: "1-4|2"
+penguins_mod <- penguins_df |> 
+  arrange(bill_length_mm, desc(year))
+
+glimpse(penguins_mod)
+```
+
+## Python
+```{python}
+#| eval: false
+#| echo: true
+penguins_mod = penguins_df.sort_values(
+    by=['bill_length_mm', 'year'], 
+    ascending=[True, False]
+)
+
+print(penguins_mod.head())
+```
+:::
+
+::: footer
+dplyr \| Learn more about [arrange()](https://dplyr.tidyverse.org/articles/dplyr.html#arrange-rows-with-arrange)
+:::
+
+## arrange
+
+- The `arrange()` function sorts rows in order of one or more columns
+- You can arrange in ascending order (the default) or descending order by wrapping the column name in `desc()`
+
+![Image credit: Duke University <https://intro2r.library.duke.edu/wrangle.html>](images/arrange_rows.svg)
+
+::: footer
+dplyr \| Learn more about [arrange()](https://dplyr.tidyverse.org/articles/dplyr.html#arrange-rows-with-arrange)
+:::
+
+## mutate
+
+- Create or modify columns with `mutate()`
+
+. . .
+
+::: panel-tabset
+
+## R
+```{r}
+#| eval: true
+#| echo: true
+#| code-line-numbers: "1-4|2"
+penguins_mod <- penguins_df |> 
+  mutate(body_mass_kg = body_mass_g * 1000)
+
+glimpse(penguins_mod)
+```
+
+## Python
+```{python}
+#| eval: false
+#| echo: true
+penguins_mod = penguins_df.assign(
+    body_mass_kg = penguins_df['body_mass_g'] * 1000
+)
+
+print(penguins_mod.head())
+```
+:::
+
+::: footer
+dplyr \| Learn more about [mutate()](https://dplyr.tidyverse.org/articles/dplyr.html#add-new-columns-with-mutate)
+:::
+
+## mutate
+
+- Add new columns to your dataframe or tibble with `mutate()`
+- dplyr's `mutate()` is similar to base R's `transform()` with the added benefit of being able to reference columns you've just created
+
+![Image credit: Duke University <https://intro2r.library.duke.edu/wrangle.html>](images/mutate.svg)
+
+::: footer
+dplyr \| Learn more about [mutate()](https://dplyr.tidyverse.org/articles/dplyr.html#add-new-columns-with-mutate)
+:::
+
+## group_by and summarize
+
+- `group_by()` variables and `summarize()` results
+
+. . .
+
+::: panel-tabset
+
+## R
+```{r}
+#| eval: true
+#| echo: true
+#| code-line-numbers: "1-5|2-3"
+penguins_mod <- penguins_df |> 
+  group_by(sex) |> 
+  summarize(mean_mass_g = mean(body_mass_g, na.rm = TRUE))
+
+glimpse(penguins_mod)
+```
+
+## Python
+```{python}
+#| eval: false
+#| echo: true
+grouped = penguins_df.groupby('sex')['body_mass_g'].transform(lambda x: x.mean(skipna=True))
+
+penguins_mod = penguins_df.assign(mean_mass_g=grouped)
+
+print(penguins_mod.head())
+```
+:::
+
+::: footer
+dplyr \| Learn more about [summarize()](https://dplyr.tidyverse.org/articles/dplyr.html#summarize)
+:::
+
+## group_by and summarize
+
+- `summarize()` creates a new data frame
+- it returns one row for each combination of grouping variables
+- if there are no grouping variables, the output will have a single row summarizing all observations in the input
+
+::: footer
+dplyr \| Learn more about [summarize()](https://dplyr.tidyverse.org/articles/dplyr.html#summarize)
+:::
+
+## Chaining Methods
+
+- In R, the native pipe operator (`|>`) or magrittr pipe (`%>%`) can be used to chain or pipe dplyr functions together
+
+```{r}
+#| eval: true
+#| echo: true
+penguins_mod <- penguins_df |> 
+  select(sex, bill_length_mm, body_mass_g) |> 
+  filter(sex == "female",
+         bill_length_mm > 30) |> 
+  group_by(sex) |> 
+  summarize(mean_mass_g = mean(body_mass_g, na.rm = TRUE))
+
+glimpse(penguins_mod)
+```
+
+::: footer
+dplyr \| Learn more about [piping](https://dplyr.tidyverse.org/articles/dplyr.html#the-pipe)
+:::
+
+## Chaining Methods
+
+- In Python, the period (`.`) is used as the chain functions together
+
+```{python}
+#| eval: false
+#| echo: true
+selected = penguins_df[['sex', 'bill_length_mm', 'body_mass_g']]
+
+filtered = selected[(selected['sex'] == 'female') & (selected['bill_length_mm'] > 30)]
+
+penguins_mod = filtered.groupby('sex').agg(mean_mass_g=('body_mass_g', 'mean')).reset_index()
+```
+
+# 2. Arrow
+
+::: footer
+Arrow \| Learn more at <https://arrow.apache.org/>
+:::
+
+------------------------------------------------------------------------
+
+## Larger-than-Memory Data
+
+<br> ![](images/apache_arrow.png)
+
+::: footer
+Arrow \| Learn more at <https://arrow.apache.org/>
+:::
+
+## Arrow and Parquet `r hexes("arrow")`
+
+-   Columnar memory format for flat data
+-   Ultra-fast read times from Parquet files
+-   Easily convert data.frames and tibbles to Arrow tables in-line
+-   Plays well with Pandas (Python) and dplyr (R)
+-   Arrow will soon be able to process nested list data
+
+::: notes
+Libraries are available for C, C++, C#, Go, Java, JavaScript, Julia, MATLAB, Python, R, Ruby, and Rust
+
+Arrow is organized for efficient analytic operations on modern hardware like CPUs and GPUs.
+
+The Arrow memory format also supports zero-copy reads for lightning-fast data access without serialization overhead
+:::
+
+::: footer
+Arrow \| Learn more at <https://arrow.apache.org/>
+:::
+
+## How fast is fast? `r hexes("arrow")`
+
+::: incremental
+-   My personal laptop has 24 GB RAM
+-   To test Arrow's capabilities, I read a [40 GB dataset]{.fragment .highlight-teal} with over [1.1 billion rows]{.fragment .highlight-teal} and 24 columns
+-   The `.parquet` dataset was partitioned by Year and Month (120 files)
+-   Important to note that my laptop would not be able to load this object entirely into memory as a data.frame or tibble given my laptop's limited RAM
+:::
+
+::: footer
+Arrow \| Learn more at <https://arrow.apache.org/>
+:::
+
+## Benchmarking Read Times `r hexes("arrow", "ggplot2")`
+
+```{r}
+#| eval: false
+#| echo: true
+
+library(here)
+library(arrow)
+library(dplyr)
+library(ggplot2)
+library(bench)
+
+# NYC Taxi Data download (40 GB)
+data_path <- here::here("data/nyc-taxi")
+
+open_dataset("s3://voltrondata-labs-datasets/nyc-taxi") |>
+  filter(year %in% 2012:2021) |> 
+  write_dataset(data_path, partitioning = c("year", "month"))
+```
+
+::: footer
+Arrow \| Learn more at <https://arrow.apache.org/>
+:::
+
+## Benchmarking Read Times `r hexes("arrow", "ggplot2")`
+
+```{r}
+#| eval: false
+#| echo: true
+
+# 2. Benchmark Read Times
+bnch <- bench::mark(
+  min_iterations = 1000,
+  arrow = open_dataset(here::here("data/nyc-taxi"))
+)
+
+autoplot(bnch)
+```
+
+::: footer
+Arrow \| Learn more at <https://arrow.apache.org/>
+:::
+
+## Benchmarking Read Times `r hexes("arrow", "ggplot2")`
+
+-   Results show read times from a 40GB parquet, 1.1 billion row dataset (benchmarked over 1,000 iterations)
+
+![](images/arrow_read.png){width="55%" fig-align="center"}
+
+::: footer
+Arrow \| Learn more at <https://arrow.apache.org/>
+:::
+
+## arrow + dplyr Benchmark `r hexes("arrow", "dplyr", "ggplot2")`
+
+```{r}
+#| eval: false
+#| echo: true
+
+# 1. Open Arrow connection to dataset (40 GB)
+nyc_taxi <- open_dataset(here::here("data/nyc-taxi"))
+
+# 2. Benchmark dplyr pipeline
+bnch <- bench::mark(
+  min_iterations = 10,
+  arrow = nyc_taxi |> 
+    dplyr::group_by(year) |> 
+    dplyr::summarise(all_trips = n(),
+                     shared_trips = sum(passenger_count > 1, na.rm = T)) |>
+    dplyr::mutate(pct_shared = shared_trips / all_trips * 100) |> 
+    dplyr::collect()
+)
+
+autoplot(bnch)
+```
+
+::: footer
+Arrow \| [Arrow + dplyr compatibility](https://r4ds.hadley.nz/arrow.html)
+:::
+
+## arrow + dplyr Benchmark `r hexes("arrow", "dplyr", "ggplot2")`
+
+-   Arrow + dplyr summarized 1.1 billion rows in less than 5s (benchmarked over 10 iterations) to a 10 x 4 tibble
+
+![](images/arrow_group_by.png){width="55%" fig-align="center"}
+
+::: footer
+Arrow \| [Arrow + dplyr compatibility](https://r4ds.hadley.nz/arrow.html)
+:::
+
+## Tidyverse Compatibility `r hexes("arrow", "tidyverse", "stringr")`
+
+-   Many functions from the tidyverse collections of packages have 1:1 compatibility with Arrow tables
+-   However, sometimes you'll encounter a breaking point
+-   Take this `stringr::str_replace_na()` example:
+
+```{r}
+#| echo: true
+#| code-line-numbers: "1-4|3-4"
+nyc_taxi |> 
+  mutate(vendor_name = str_replace_na(vendor_name, "No vendor"))
+#> Error: Expression str_replace_na(vendor_name, "No vendor") 
+#> not supported in Arrow
+```
+
+. . .
+
+-   This `stringr` function is not supported by Arrow
+
+::: footer
+Arrow \| [Arrow + dplyr compatibility](https://r4ds.hadley.nz/arrow.html)
+:::
+
+------------------------------------------------------------------------
+
+![](images/crying_cat.gif){fig-align="center"}
+
+------------------------------------------------------------------------
+
+::: r-fit-text
+but wait!
+:::
+
+::: r-fit-text
+problem solved
+:::
+
+------------------------------------------------------------------------
+
+## User Defined Functions `r hexes("arrow", "tidyverse", "dplyr", "stringr")`
+
+-   Lucky for us, Arrow allows us to create and register ***User Defined Functions ("UDFs")*** to the Arrow engine
+-   Almost any function can be made compatible with Arrow by registering custom UDFs
+-   Let's learn how to register `str_replace_na()` with the Arrow kernel
+
+::: footer
+Arrow \| Learn more about registering Arrow [User Defined Functions ("UDFs")](https://arrow.apache.org/docs/r/reference/register_scalar_function.html)
+:::
+
+## Registering UDFs `r hexes("arrow", "dplyr", "stringr", "tidyverse")`
+
+-   First, run `arrow::schema()` on your Arrow table to review the field name / data type pairs
+-   Since I want to mutate the `vendor_name` field, I know I'll be working with an Arrow `string()` data type
+
+```{r}
+#| echo: true
+#| code-line-numbers: "1-10|3"
+arrow::schema(nyc_taxi)
+#> Schema
+#> vendor_name: string
+#> pickup_datetime: timestamp[ms]
+#> dropoff_datetime: timestamp[ms]
+#> passenger_count: int64
+#> trip_distance: double
+#> pickup_longitude: double
+#> pickup_latitude: double
+#> ...
+```
+
+::: footer
+Arrow \| Learn more about registering Arrow [User Defined Functions ("UDFs")](https://arrow.apache.org/docs/r/reference/register_scalar_function.html)
+:::
+
+## Registering UDFs `r hexes("arrow", "dplyr", "stringr", "tidyverse")`
+
+-   Next, use `register_scalar_function()`
+-   Name your UDF "replace_arrow_nas" and remember to set `auto_convert = TRUE`
+
+```{r}
+#| echo: true
+#| code-line-numbers: "1-13|3-4|3-4,12"
+arrow::register_scalar_function(
+  name = "replace_arrow_nas",
+  # Note: The first argument must always be context
+  function(context, x, replacement) {
+    stringr::str_replace_na(x, replacement)
+  },
+  in_type = schema(
+    x = string(),
+    replacement = string()
+  ),
+  out_type = string(),
+  auto_convert = TRUE
+)
+```
+
+::: notes
+Unless you're developing a package, `auto_convert` should be set to `TRUE`
+:::
+
+::: footer
+Arrow \| Learn more about registering Arrow [User Defined Functions ("UDFs")](https://arrow.apache.org/docs/r/reference/register_scalar_function.html)
+:::
+
+## Registering UDFs `r hexes("arrow", "dplyr", "stringr", "tidyverse")`
+
+-   Try your new registered function
+
+```{r}
+#| echo: true
+nyc_taxi |> 
+  mutate(vendor_name = replace_arrow_nas(vendor_name, "No vendor")) |> 
+  distinct(vendor_name) |> 
+  arrange(vendor_name) |> 
+  collect()
+#> # A tibble: 3 × 1
+#>   vendor_name
+#>   <chr>      
+#> 1 CMT
+#> 2 No vendor
+#> 3 VTS
+```
+
+::: footer
+Arrow \| Learn more about registering Arrow [User Defined Functions ("UDFs")](https://arrow.apache.org/docs/r/reference/register_scalar_function.html)
+:::
+
+------------------------------------------------------------------------
+
+![](images/pokemon.gif)
+
+::: footer
+Eevee can't believe it... "Wooooooooooow, Javi!"
+:::
+
+## What's next for Arrow? `r hexes("arrow")`
+
+***ADBC: Arrow Database Connectivity***
+
+-   Competitor to JDBC & ODBC allowing applications to code to this API standard but fetching results in an Arrow format
+
+::: footer
+ADBC (Arrow Database Connectivity) \| Learn more at <https://arrow.apache.org/docs/format/ADBC.html>
+:::
+
+## What's next for Arrow? `r hexes("arrow")`
+
+***ADBC: Arrow Database Connectivity***
+
+![](images/ADBCQuadrants.svg){width="50%" fig-align="center"}
+
+::: footer
+ADBC (Arrow Database Connectivity) \| Learn more at <https://arrow.apache.org/docs/format/ADBC.html>
+:::
+
+## What's next for Arrow? `r hexes("arrow")`
+
+***Arrow Flight SQL***
+
+-   A protocol for interacting with SQL databases using the Arrow in-memory format and the [Flight RPC](https://arrow.apache.org/docs/format/Flight.html) framework
+-   Its natural mode is to stream sequences of Arrow "record batches” to reduce or remove the serialization cost associated with data transport
+-   The design goal for Flight is to create a new protocol for data services that uses the Arrow columnar format as both the over-the-wire data representation as well as the public API presented to developers
+
+::: footer
+Arrow Flight SQL \| Learn more at <https://arrow.apache.org/docs/format/FlightSql.html>
+:::
+
+# 3. DuckDB
+
+::: footer
+duckplyr by DuckDB Labs \| Learn more at <https://duckdblabs.com/>
+:::
+
+------------------------------------------------------------------------
+
+## DuckDB `r hexes_duckdb("duckdb")`
+
+-   [DuckDB Labs](https://duckdblabs.com/) created an in-line database management system, like a SQLite database engine, but optimized for distributed compute and optimized for larger-than-memory analysis
+-   The `duckdb` package for Python offers a state-of-the-art optimizer that pushes down filters and projections directly into Arrow scans
+-   As a result, only relevant columns and partitions will be read thus significantly accelerates query execution
+
+::: footer
+DuckDB Labs \| Learn how [DuckDB quacks Arrow](https://duckdb.org/2021/12/03/duck-arrow.html)
+:::
+
+## DuckDB setup `r hexes_duckdb("duckdb")`
+
+<br><br>
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| eval: false
+#| echo: true
+# R Install
+install.packages("duckdb")
+install.packages("arrow")
+
+# For later use by Python and R:
+arrow::copy_files(
+  from = "s3://ursa-labs-taxi-data", 
+  to = here::here("nyc-taxi")
+)
+```
+:::
+
+::: {.column width="50%"}
+```{python}
+#| eval: false
+#| echo: true
+# Python Install
+pip install duckdb
+pip install pyarrow
+```
+:::
+:::
+
+::: footer
+DuckDB Labs \| Learn how [DuckDB quacks Arrow](https://duckdb.org/2021/12/03/duck-arrow.html)
+:::
+
+## DuckDB Basics `r hexes_duckdb("duckdb")`
+
+::: panel-tabset
+## R
+
+```{r}
+#| eval: false
+#| echo: true
+library(duckdb)
+library(arrow)
+library(dplyr)
+
+ds <- arrow::open_dataset("nyc-taxi", partitioning = c("year", "month"))
+
+ds |>
+  filter(year > 2014 & passenger_count > 0 & 
+           trip_distance > 0.25 & fare_amount > 0) |>
+  # Pass off to DuckDB
+  to_duckdb() |>
+  group_by(passenger_count) |>
+  mutate(tip_pct = tip_amount / fare_amount) |>
+  summarise(fare_amount = mean(fare_amount, na.rm = TRUE),
+            tip_amount = mean(tip_amount, na.rm = TRUE),
+            tip_pct = mean(tip_pct, na.rm = TRUE)) |>
+  arrange(passenger_count) |>
+  collect()
+```
+
+## Python
+
+```{python}
+#| eval: false
+#| echo: true
+import duckdb
+import pyarrow as pa
+import pyarrow.dataset as ds
+
+# Open dataset using year,month folder partition
+nyc = ds.dataset('nyc-taxi/', partitioning=["year", "month"])
+
+# We transform the nyc dataset into a DuckDB relation
+nyc = duckdb.arrow(nyc)
+
+# Run same query again
+nyc.filter("year > 2014 & passenger_count > 0 & trip_distance > 0.25 & fare_amount > 0")
+    .aggregate("SELECT AVG(fare_amount), AVG(tip_amount), AVG(tip_amount / fare_amount) as tip_pct","passenger_count").arrow()
+```
+:::
+
+::: footer
+DuckDB Labs \| Learn how [DuckDB quacks Arrow](https://duckdb.org/2021/12/03/duck-arrow.html)
+:::
+
+## DuckDB Streaming `r hexes_duckdb("duckdb")`
+
+::: panel-tabset
+## R
+
+```{r}
+#| eval: false
+#| echo: true
+# Reads dataset partitioning it in year/month folder
+nyc_dataset = open_dataset("nyc-taxi/", partitioning = c("year", "month"))
+
+# Gets Database Connection
+con <- dbConnect(duckdb::duckdb())
+
+# We can use the same function as before to register our arrow dataset
+duckdb::duckdb_register_arrow(con, "nyc", nyc_dataset)
+
+res <- dbSendQuery(con, "SELECT * FROM nyc", arrow = TRUE)
+
+# DuckDB's queries can now produce a Record Batch Reader
+record_batch_reader <- duckdb::duckdb_fetch_record_batch(res)
+
+# Which means we can stream the whole query per batch.
+# This retrieves the first batch
+cur_batch <- record_batch_reader$read_next_batch()
+```
+
+## Python
+
+```{python}
+#| eval: false
+#| echo: true
+# Reads dataset partitioning it in year/month folder
+nyc_dataset = ds.dataset('nyc-taxi/', partitioning=["year", "month"])
+
+# Gets Database Connection
+con = duckdb.connect()
+
+query = con.execute("SELECT * FROM nyc_dataset")
+
+# DuckDB's queries can now produce a Record Batch Reader
+record_batch_reader = query.fetch_record_batch()
+
+# Which means we can stream the whole query per batch.
+# This retrieves the first batch
+chunk = record_batch_reader.read_next_batch()
+```
+:::
+
+::: footer
+DuckDB Labs \| Learn how [DuckDB quacks Arrow](https://duckdb.org/2021/12/03/duck-arrow.html)
+:::
+
+## DuckDB Streaming Speed `r hexes_duckdb("duckdb")`
+
+::: panel-tabset
+## DuckDB
+
+```{r}
+#| eval: false
+#| echo: true
+# DuckDB via Python
+# Open dataset using year,month folder partition
+nyc = ds.dataset('nyc-taxi/', partitioning=["year", "month"])
+
+# Get database connection
+con = duckdb.connect()
+
+# Run query that selects part of the data
+query = con.execute("SELECT total_amount, passenger_count,year FROM nyc where total_amount > 100 and year > 2014")
+
+# Create Record Batch Reader from Query Result.
+# "fetch_record_batch()" also accepts an extra parameter related to the desired produced chunk size.
+record_batch_reader = query.fetch_record_batch()
+
+# Retrieve all batch chunks
+chunk = record_batch_reader.read_next_batch()
+while len(chunk) > 0:
+    chunk = record_batch_reader.read_next_batch()
+```
+
+## Pandas
+
+```{python}
+#| eval: false
+#| echo: true
+# We must exclude one of the columns of the NYC dataset due to an unimplemented cast in Arrow
+working_columns = ["vendor_id","pickup_at","dropoff_at","passenger_count","trip_distance","pickup_longitude",
+    "pickup_latitude","store_and_fwd_flag","dropoff_longitude","dropoff_latitude","payment_type",
+    "fare_amount","extra","mta_tax","tip_amount","tolls_amount","total_amount","year", "month"]
+
+# Open dataset using year,month folder partition
+nyc_dataset = ds.dataset(dir, partitioning=["year", "month"])
+# Generate a scanner to skip problematic column
+dataset_scanner = nyc_dataset.scanner(columns=working_columns)
+
+# Materialize dataset to an Arrow Table
+nyc_table = dataset_scanner.to_table()
+
+# Generate Dataframe from Arow Table
+nyc_df = nyc_table.to_pandas()
+
+# Apply Filter
+filtered_df = nyc_df[
+    (nyc_df.total_amount > 100) &
+    (nyc_df.year >2014)]
+
+# Apply Projection
+res = filtered_df[["total_amount", "passenger_count","year"]]
+
+# Transform Result back to an Arrow Table
+new_table = pa.Table.from_pandas(res)
+```
+:::
+
+::: footer
+DuckDB Labs \| Learn how [DuckDB quacks Arrow](https://duckdb.org/2021/12/03/duck-arrow.html)
+:::
+
+## DuckDB Streaming Speed `r hexes_duckdb("duckdb")`
+
+-   Pandas runtime was 146.91 seconds
+
+. . .
+
+-   DuckDB runtime was [0.05 seconds]{.fragment .highlight-teal}
+
+. . .
+
+![](images/minion.gif){width="60%" fig-align="center"}
+
+::: footer
+DuckDB Labs \| Learn how [DuckDB quacks Arrow](https://duckdb.org/2021/12/03/duck-arrow.html)
+:::
+
+## duckplyr `r hexes_duckdb("duckdb")`
+
+-   `duckplyr`, from DuckDB Labs, offers 1:1 compatibility with `dplyr` functions but there are some caveats:
+    -   factor columns, nested lists, and nested tibbles are not *yet* supported
+    -   you have to use `.by` in `dplyr::summarize()` as `dplyr::group_by()` will not be supported by the developers
+
+::: footer
+duckplyr \| Learn more at <https://duckdblabs.com/>
+:::
+
+## Benchmarking Analysis `r hexes_duckdb("duckdb")`
+
+::: columns
+::: {.column width="43%"}
+-   Arrow and DuckDB really stood out for fast manipulation of data using `dplyr` syntax
+:::
+
+::: {.column width="57%"}
+-   The code below shows the basic transformation done to the NYC Taxi dataset via `dplyr`, `arrow`, `duckdb`, and `duckplyr`
+:::
+:::
+
+```{r}
+#| eval: false
+#| echo: true
+#| code-line-numbers: "1-7|7"
+nyc_taxi |> 
+    dplyr::filter(passenger_count > 1) |> 
+    dplyr::group_by(year) |> 
+    dplyr::summarise(all_trips = n(),
+                     shared_trips = sum(passenger_count, na.rm = T)) |>
+    dplyr::mutate(pct_shared = shared_trips / all_trips * 100) |> 
+    dplyr::collect()
+```
+
+::: footer
+DuckDB Labs \| Learn more at <https://duckdblabs.com/>
+:::
+
+## Benchmark: 1 million rows `r hexes_duckdb("duckdb")`
+
+![](images/benchmark_1000000.png){fig-align="center"}
+
+::: footer
+DuckDB Labs \| Learn more at <https://duckdblabs.com/>
+:::
+
+## Benchmark: 10 million rows `r hexes_duckdb("duckdb")`
+
+![](images/benchmark_10000000.png){fig-align="center"}
+
+::: footer
+DuckDB Labs \| Learn more at <https://duckdblabs.com/>
+:::
+
+## Benchmark: 100 million rows `r hexes_duckdb("duckdb")`
+
+![](images/benchmark_100000000.png){fig-align="center"}
+
+::: footer
+DuckDB Labs \| Learn more at <https://duckdblabs.com/>
+:::
+
+## Benchmark: 500 million rows `r hexes_duckdb("duckdb")`
+
+![](images/benchmark_500000000.png){fig-align="center"}
+
+::: footer
+DuckDB Labs \| Learn more at <https://duckdblabs.com/>
+:::
+
+------------------------------------------------------------------------
+
+::: r-fit-text
+questions?
+:::
+
+------------------------------------------------------------------------
