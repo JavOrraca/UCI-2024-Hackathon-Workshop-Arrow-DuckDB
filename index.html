@@ -926,18 +926,24 @@ $ mean_mass_g &lt;dbl&gt; 3862.273</code></pre>
 <section id="benchmarking-read-times" class="slide level2">
 <h2>Benchmarking Read Times <img data-src="hexes/ggplot2.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "> <img data-src="hexes/arrow.png" class="absolute" style="top: -20px; right: 64px; width: 64px; height: 74.24px; "></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a><span class="fu">library</span>(here)</span>
-<span id="cb24-2"><a href=""></a><span class="fu">library</span>(arrow)</span>
-<span id="cb24-3"><a href=""></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb24-4"><a href=""></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb24-5"><a href=""></a><span class="fu">library</span>(bench)</span>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a><span class="co"># Install full Arrow with S3 and GCS support:</span></span>
+<span id="cb24-2"><a href=""></a><span class="co"># Sys.setenv("LIBARROW_MINIMAL" = FALSE)</span></span>
+<span id="cb24-3"><a href=""></a><span class="co"># Sys.setenv("ARROW_S3" = "ON")</span></span>
+<span id="cb24-4"><a href=""></a><span class="co"># Sys.setenv("ARROW_GCS" = "ON")</span></span>
+<span id="cb24-5"><a href=""></a><span class="co"># install.packages("arrow")</span></span>
 <span id="cb24-6"><a href=""></a></span>
-<span id="cb24-7"><a href=""></a><span class="co"># NYC Taxi Data download (40 GB)</span></span>
-<span id="cb24-8"><a href=""></a>data_path <span class="ot">&lt;-</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/nyc-taxi"</span>)</span>
-<span id="cb24-9"><a href=""></a></span>
-<span id="cb24-10"><a href=""></a><span class="fu">open_dataset</span>(<span class="st">"s3://voltrondata-labs-datasets/nyc-taxi"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb24-11"><a href=""></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="dv">2012</span><span class="sc">:</span><span class="dv">2021</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb24-12"><a href=""></a>  <span class="fu">write_dataset</span>(data_path, <span class="at">partitioning =</span> <span class="fu">c</span>(<span class="st">"year"</span>, <span class="st">"month"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb24-7"><a href=""></a><span class="fu">library</span>(here)</span>
+<span id="cb24-8"><a href=""></a><span class="fu">library</span>(arrow)</span>
+<span id="cb24-9"><a href=""></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb24-10"><a href=""></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb24-11"><a href=""></a><span class="fu">library</span>(bench)</span>
+<span id="cb24-12"><a href=""></a></span>
+<span id="cb24-13"><a href=""></a><span class="co"># NYC Taxi Data download (40 GB)</span></span>
+<span id="cb24-14"><a href=""></a>data_path <span class="ot">&lt;-</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/nyc-taxi"</span>)</span>
+<span id="cb24-15"><a href=""></a></span>
+<span id="cb24-16"><a href=""></a><span class="fu">open_dataset</span>(<span class="st">"s3://voltrondata-labs-datasets/nyc-taxi"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb24-17"><a href=""></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="dv">2012</span><span class="sc">:</span><span class="dv">2021</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb24-18"><a href=""></a>  <span class="fu">write_dataset</span>(data_path, <span class="at">partitioning =</span> <span class="fu">c</span>(<span class="st">"year"</span>, <span class="st">"month"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="footer">
 <p>Arrow | Learn more at <a href="https://arrow.apache.org/" class="uri">https://arrow.apache.org/</a></p>
@@ -1202,19 +1208,12 @@ $ mean_mass_g &lt;dbl&gt; 3862.273</code></pre>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a><span class="co"># Install full Arrow with S3 and GCS support:</span></span>
-<span id="cb31-2"><a href=""></a><span class="fu">Sys.setenv</span>(<span class="st">"LIBARROW_MINIMAL"</span> <span class="ot">=</span> <span class="cn">FALSE</span>)</span>
-<span id="cb31-3"><a href=""></a><span class="fu">Sys.setenv</span>(<span class="st">"ARROW_S3"</span> <span class="ot">=</span> <span class="st">"ON"</span>)</span>
-<span id="cb31-4"><a href=""></a><span class="fu">Sys.setenv</span>(<span class="st">"ARROW_GCS"</span> <span class="ot">=</span> <span class="st">"ON"</span>)</span>
-<span id="cb31-5"><a href=""></a><span class="fu">install.packages</span>(<span class="st">"arrow"</span>)</span>
-<span id="cb31-6"><a href=""></a><span class="fu">install.packages</span>(<span class="st">"duckdb"</span>)</span>
-<span id="cb31-7"><a href=""></a></span>
-<span id="cb31-8"><a href=""></a><span class="co"># Connect to dataset and write data</span></span>
-<span id="cb31-9"><a href=""></a><span class="co"># to a partitioned Parquet file:</span></span>
-<span id="cb31-10"><a href=""></a><span class="fu">open_dataset</span>(<span class="st">"s3://voltrondata-labs-datasets/nyc-taxi"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb31-11"><a href=""></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="dv">2012</span><span class="sc">:</span><span class="dv">2021</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb31-12"><a href=""></a>  <span class="fu">write_dataset</span>(<span class="st">"&lt;your local write path&gt;"</span>, </span>
-<span id="cb31-13"><a href=""></a>                <span class="at">partitioning =</span> <span class="fu">c</span>(<span class="st">"year"</span>, <span class="st">"month"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a><span class="co"># Connect to dataset and write data</span></span>
+<span id="cb31-2"><a href=""></a><span class="co"># to a partitioned Parquet file:</span></span>
+<span id="cb31-3"><a href=""></a><span class="fu">open_dataset</span>(<span class="st">"s3://voltrondata-labs-datasets/nyc-taxi"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb31-4"><a href=""></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="dv">2012</span><span class="sc">:</span><span class="dv">2021</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb31-5"><a href=""></a>  <span class="fu">write_dataset</span>(<span class="st">"&lt;your local write path&gt;"</span>, </span>
+<span id="cb31-6"><a href=""></a>                <span class="at">partitioning =</span> <span class="fu">c</span>(<span class="st">"year"</span>, <span class="st">"month"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">

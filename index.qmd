@@ -506,6 +506,12 @@ Arrow \| Learn more at <https://arrow.apache.org/>
 #| eval: false
 #| echo: true
 
+# Install full Arrow with S3 and GCS support:
+# Sys.setenv("LIBARROW_MINIMAL" = FALSE)
+# Sys.setenv("ARROW_S3" = "ON")
+# Sys.setenv("ARROW_GCS" = "ON")
+# install.packages("arrow")
+
 library(here)
 library(arrow)
 library(dplyr)
@@ -780,12 +786,6 @@ DuckDB Labs \| Learn how [DuckDB quacks Arrow](https://duckdb.org/2021/12/03/duc
 ```{r}
 #| eval: false
 #| echo: true
-# Install full Arrow with S3 and GCS support:
-Sys.setenv("LIBARROW_MINIMAL" = FALSE)
-Sys.setenv("ARROW_S3" = "ON")
-Sys.setenv("ARROW_GCS" = "ON")
-install.packages("arrow")
-install.packages("duckdb")
 
 # Connect to dataset and write data
 # to a partitioned Parquet file:
