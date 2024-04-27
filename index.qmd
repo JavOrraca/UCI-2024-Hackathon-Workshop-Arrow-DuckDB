@@ -780,15 +780,19 @@ DuckDB Labs \| Learn how [DuckDB quacks Arrow](https://duckdb.org/2021/12/03/duc
 ```{r}
 #| eval: false
 #| echo: true
-# R Install
-install.packages("duckdb")
+# Install full Arrow with S3 and GCS support:
+Sys.setenv("LIBARROW_MINIMAL" = FALSE)
+Sys.setenv("ARROW_S3" = "ON")
+Sys.setenv("ARROW_GCS" = "ON")
 install.packages("arrow")
+install.packages("duckdb")
 
-# For later use by Python and R:
-arrow::copy_files(
-  from = "s3://ursa-labs-taxi-data", 
-  to = here::here("nyc-taxi")
-)
+# Connect to dataset and write data
+# to a partitioned Parquet file:
+open_dataset("s3://voltrondata-labs-datasets/nyc-taxi") |>
+  filter(year %in% 2012:2021) |> 
+  write_dataset("<your local write path>", 
+                partitioning = c("year", "month"))
 ```
 :::
 
@@ -796,9 +800,23 @@ arrow::copy_files(
 ```{python}
 #| eval: false
 #| echo: true
-# Python Install
-pip install duckdb
-pip install pyarrow
+import os
+
+# Set environment variables
+os.environ["LIBARROW_MINIMAL"] = "FALSE"
+os.environ["ARROW_S3"] = "ON"
+os.environ["ARROW_GCS"] = "ON"
+
+!pip install pyarrow
+!pip install duckdb
+
+import pyarrow as pa
+import pyarrow.dataset as ds
+import duckdb
+
+dataset = ds.dataset("s3://voltrondata-labs-datasets/nyc-taxi", format="parquet")
+filtered_data = dataset.to_table(filter=ds.field('year').isin(range(2012, 2022)))
+filtered_data.write_to_dataset("<your local write path>", partitioning=["year", "month"])
 ```
 :::
 :::
