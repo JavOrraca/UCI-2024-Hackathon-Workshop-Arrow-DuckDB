@@ -38,7 +38,7 @@ knitr: true
 -   `pandas` is a data analysis library in Python that supports the same kind of selecting, filtering, and manipulation tasks
 
 ::: footer
-[dplyr](https://dplyr.tidyverse.org/) for R | [pandas](https://pandas.pydata.org/) for Python
+[dplyr](https://dplyr.tidyverse.org/) for R \| [pandas](https://pandas.pydata.org/) for Python
 :::
 
 ## Clean ETL with R & Python
@@ -50,29 +50,29 @@ knitr: true
 -   but first...
 
 ::: footer
-[dplyr](https://dplyr.tidyverse.org/) for R | [pandas](https://pandas.pydata.org/) for Python
+[dplyr](https://dplyr.tidyverse.org/) for R \| [pandas](https://pandas.pydata.org/) for Python
 :::
 
 ------------------------------------------------------------------------
-  
+
 ::: r-fit-text
 we need
 :::
-  
+
 ------------------------------------------------------------------------
 
 ::: r-fit-text
 data!
 :::
-  
+
 ------------------------------------------------------------------------
 
 ## Palmer Penguins
 
-![Artwork by Allison Horst | <https://allisonhorst.github.io/palmerpenguins>](images/lter_penguins.png){fig-alt="Artwork by Allison Horst"}
+![Artwork by Allison Horst \| <https://allisonhorst.github.io/palmerpenguins>](images/lter_penguins.png){fig-alt="Artwork by Allison Horst"}
 
 ::: footer
-`palmerpenguins` | Package available on [CRAN for R](https://dplyr.tidyverse.org/) and [PyPI for Python](https://pypi.org/project/palmerpenguins/)
+`palmerpenguins` \| Package available on [CRAN for R](https://dplyr.tidyverse.org/) and [PyPI for Python](https://pypi.org/project/palmerpenguins/)
 :::
 
 ## Palmer Penguins
@@ -82,12 +82,12 @@ data!
 -   The data was collected by the [Palmer Station Long Term Ecological Research Program](https://pal.lternet.edu/), part of the [US Long Term Ecological Research Network](https://lternet.edu/)
 
 ::: footer
-`palmerpenguins` | Package available on [CRAN for R](https://dplyr.tidyverse.org/) and [PyPI for Python](https://pypi.org/project/palmerpenguins/)
+`palmerpenguins` \| Package available on [CRAN for R](https://dplyr.tidyverse.org/) and [PyPI for Python](https://pypi.org/project/palmerpenguins/)
 :::
 
 ## Palmer Penguins
 
-- Install `palmerpenguins` and load the curated data set
+-   Install `palmerpenguins` and load the curated data set
 
 . . .
 
@@ -104,6 +104,7 @@ penguins_df <- palmerpenguins::penguins
 
 ::: panel-tabset
 ## R
+
 ```{r}
 #| eval: false
 #| echo: true
@@ -115,6 +116,7 @@ penguins_df <- palmerpenguins::penguins
 ```
 
 ## Python
+
 ```{python}
 #| eval: false
 #| echo: true
@@ -127,13 +129,14 @@ penguins_df = load_penguins()
 :::
 
 ::: footer
-`palmerpenguins` | Package available on [CRAN for R](https://dplyr.tidyverse.org/) and [PyPI for Python](https://pypi.org/project/palmerpenguins/)
+`palmerpenguins` \| Package available on [CRAN for R](https://dplyr.tidyverse.org/) and [PyPI for Python](https://pypi.org/project/palmerpenguins/)
 :::
 
 ## Take a `glimpse()` at the Data
 
 ::: panel-tabset
 ## R
+
 ```{r}
 #| eval: true
 #| echo: true
@@ -143,6 +146,7 @@ glimpse(penguins_df)
 ```
 
 ## Python
+
 ```{python}
 #| eval: false
 #| echo: true
@@ -153,11 +157,10 @@ print(penguins_df.head())
 #| echo: false
 print(penguins_df_py.head())
 ```
-
 :::
 
 ::: footer
-`palmerpenguins` | Package available on [CRAN for R](https://dplyr.tidyverse.org/) and [PyPI for Python](https://pypi.org/project/palmerpenguins/)
+`palmerpenguins` \| Package available on [CRAN for R](https://dplyr.tidyverse.org/) and [PyPI for Python](https://pypi.org/project/palmerpenguins/)
 :::
 
 ## Functions We'll Explore
@@ -182,13 +185,13 @@ dplyr \| Learn more about [dplyr](https://dplyr.tidyverse.org/)
 
 ## select
 
-- Subset _columns_ with the `select()` function
+-   Subset *columns* with the `select()` function
 
 . . .
 
 ::: panel-tabset
-
 ## R
+
 ```{r}
 #| eval: true
 #| echo: true
@@ -200,6 +203,7 @@ glimpse(penguins_mod)
 ```
 
 ## Python
+
 ```{python}
 #| eval: false
 #| echo: true
@@ -215,7 +219,7 @@ dplyr \| Learn more about [select()](https://dplyr.tidyverse.org/articles/dplyr.
 
 ## select
 
-- Using the column (or "variable") names, `select()` let us easily subset the data
+-   Using the column (or "variable") names, `select()` let us easily subset the data
 
 ![Image credit: Duke University <https://intro2r.library.duke.edu/wrangle.html>](images/select.svg)
 
@@ -225,13 +229,13 @@ dplyr \| Learn more about [select()](https://dplyr.tidyverse.org/articles/dplyr.
 
 ## filter
 
-- Subset _rows_ with the `filter()` function
+-   Subset *rows* with the `filter()` function
 
 . . .
 
 ::: panel-tabset
-
 ## R
+
 ```{r}
 #| eval: true
 #| echo: true
@@ -244,6 +248,7 @@ glimpse(penguins_mod)
 ```
 
 ## Python
+
 ```{python}
 #| eval: false
 #| echo: true
@@ -260,7 +265,7 @@ dplyr \| Learn more about [filter()](https://dplyr.tidyverse.org/articles/dplyr.
 
 ## filter
 
-- The `filter()` function let's us keep rows where the provided expression(s) are `TRUE` 
+-   The `filter()` function let's us keep rows where the provided expression(s) are `TRUE`
 
 ![Image credit: Duke University <https://intro2r.library.duke.edu/wrangle.html>](images/filter_by_rows.svg)
 
@@ -270,8 +275,8 @@ dplyr \| Learn more about [filter()](https://dplyr.tidyverse.org/articles/dplyr.
 
 ## arrange
 
-- Sorting rows by column names can be accomplished with the `arrange()` function
-- In the example on the next slide, we'll sort the data by `bill_length_mm` ascending and by `year` descending
+-   Sorting rows by column names can be accomplished with the `arrange()` function
+-   In the example on the next slide, we'll sort the data by `bill_length_mm` ascending and by `year` descending
 
 ::: footer
 dplyr \| Learn more about [arrange()](https://dplyr.tidyverse.org/articles/dplyr.html#arrange-rows-with-arrange)
@@ -280,8 +285,8 @@ dplyr \| Learn more about [arrange()](https://dplyr.tidyverse.org/articles/dplyr
 ## arrange
 
 ::: panel-tabset
-
 ## R
+
 ```{r}
 #| eval: true
 #| echo: true
@@ -293,6 +298,7 @@ glimpse(penguins_mod)
 ```
 
 ## Python
+
 ```{python}
 #| eval: false
 #| echo: true
@@ -311,8 +317,8 @@ dplyr \| Learn more about [arrange()](https://dplyr.tidyverse.org/articles/dplyr
 
 ## arrange
 
-- The `arrange()` function sorts rows in order of one or more columns
-- You can arrange in ascending order (the default) or descending order by wrapping the column name in `desc()`
+-   The `arrange()` function sorts rows in order of one or more columns
+-   You can arrange in ascending order (the default) or descending order by wrapping the column name in `desc()`
 
 ![Image credit: Duke University <https://intro2r.library.duke.edu/wrangle.html>](images/arrange_rows.svg)
 
@@ -322,13 +328,13 @@ dplyr \| Learn more about [arrange()](https://dplyr.tidyverse.org/articles/dplyr
 
 ## mutate
 
-- Create or modify columns with `mutate()`
+-   Create or modify columns with `mutate()`
 
 . . .
 
 ::: panel-tabset
-
 ## R
+
 ```{r}
 #| eval: true
 #| echo: true
@@ -340,6 +346,7 @@ glimpse(penguins_mod)
 ```
 
 ## Python
+
 ```{python}
 #| eval: false
 #| echo: true
@@ -357,8 +364,8 @@ dplyr \| Learn more about [mutate()](https://dplyr.tidyverse.org/articles/dplyr.
 
 ## mutate
 
-- Add new columns to your dataframe or tibble with `mutate()`
-- dplyr's `mutate()` is similar to base R's `transform()` with the added benefit of being able to reference columns you've just created
+-   Add new columns to your dataframe or tibble with `mutate()`
+-   dplyr's `mutate()` is similar to base R's `transform()` with the added benefit of being able to reference columns you've just created
 
 ![Image credit: Duke University <https://intro2r.library.duke.edu/wrangle.html>](images/mutate.svg)
 
@@ -368,13 +375,13 @@ dplyr \| Learn more about [mutate()](https://dplyr.tidyverse.org/articles/dplyr.
 
 ## group_by and summarize
 
-- `group_by()` variables and `summarize()` results
+-   `group_by()` variables and `summarize()` results
 
 . . .
 
 ::: panel-tabset
-
 ## R
+
 ```{r}
 #| eval: true
 #| echo: true
@@ -387,6 +394,7 @@ glimpse(penguins_mod)
 ```
 
 ## Python
+
 ```{python}
 #| eval: false
 #| echo: true
@@ -404,9 +412,9 @@ dplyr \| Learn more about [summarize()](https://dplyr.tidyverse.org/articles/dpl
 
 ## group_by and summarize
 
-- `summarize()` creates a new data frame
-- it returns one row for each combination of grouping variables
-- if there are no grouping variables, the output will have a single row summarizing all observations in the input
+-   `summarize()` creates a new data frame
+-   it returns one row for each combination of grouping variables
+-   if there are no grouping variables, the output will have a single row summarizing all observations in the input
 
 ::: footer
 dplyr \| Learn more about [summarize()](https://dplyr.tidyverse.org/articles/dplyr.html#summarize)
@@ -414,7 +422,7 @@ dplyr \| Learn more about [summarize()](https://dplyr.tidyverse.org/articles/dpl
 
 ## Chaining Methods
 
-- In R, the native pipe operator (`|>`) or magrittr pipe (`%>%`) can be used to chain or pipe dplyr functions together
+-   In R, the native pipe operator (`|>`) or magrittr pipe (`%>%`) can be used to chain or pipe dplyr functions together
 
 ```{r}
 #| eval: true
@@ -435,7 +443,7 @@ dplyr \| Learn more about [piping](https://dplyr.tidyverse.org/articles/dplyr.ht
 
 ## Chaining Methods
 
-- In Python, the period (`.`) is used as the chain functions together
+-   In Python, the period (`.`) is used as the chain functions together
 
 ```{python}
 #| eval: false
