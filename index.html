@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<script src="posit-conf-2023-recap_files/libs/clipboard/clipboard.min.js"></script>
-<script src="posit-conf-2023-recap_files/libs/quarto-html/tabby.min.js"></script>
-<script src="posit-conf-2023-recap_files/libs/quarto-html/popper.min.js"></script>
-<script src="posit-conf-2023-recap_files/libs/quarto-html/tippy.umd.min.js"></script>
-<link href="posit-conf-2023-recap_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="posit-conf-2023-recap_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="posit-conf-2023-recap_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
-<link href="posit-conf-2023-recap_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.4.376">
+<script src="index_files/libs/clipboard/clipboard.min.js"></script>
+<script src="index_files/libs/quarto-html/tabby.min.js"></script>
+<script src="index_files/libs/quarto-html/popper.min.js"></script>
+<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="index_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.4.549">
 
   <meta name="author" content="Javier Orraca-Deatcu">
-  <title>posit::conf(2023)</title>
+  <title>ETL with Arrow and DuckDB</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="posit-conf-2023-recap_files/libs/revealjs/dist/reset.css">
-  <link rel="stylesheet" href="posit-conf-2023-recap_files/libs/revealjs/dist/reveal.css">
+  <link rel="stylesheet" href="index_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="index_files/libs/revealjs/dist/reveal.css">
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -95,12 +95,12 @@
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="posit-conf-2023-recap_files/libs/revealjs/dist/theme/quarto.css">
-  <link href="posit-conf-2023-recap_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
-  <link href="posit-conf-2023-recap_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
-  <link href="posit-conf-2023-recap_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
-  <link href="posit-conf-2023-recap_files/libs/revealjs/plugin/reveal-codewindow/codewindow.css" rel="stylesheet">
-  <link href="posit-conf-2023-recap_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <link rel="stylesheet" href="index_files/libs/revealjs/dist/theme/quarto.css">
+  <link href="index_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="index_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="index_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="index_files/libs/revealjs/plugin/reveal-codewindow/codewindow.css" rel="stylesheet">
+  <link href="index_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
   <style type="text/css">
 
   .callout {
@@ -386,230 +386,499 @@
       margin-right: 0; 
     }
   </style>
-  <link href="posit-conf-2023-recap_files/libs/countdown-0.4.0/countdown.css" rel="stylesheet">
-  <script src="posit-conf-2023-recap_files/libs/countdown-0.4.0/countdown.js"></script>
 </head>
 <body class="quarto-light">
   <div class="reveal">
     <div class="slides">
 
-<section id="title-slide" data-background-color="#76AADB" data-background-position="bottom 50px right 50px" data-background-size="360px" class="quarto-title-block center">
-  <h1 class="title">posit::conf(<font color="white">2023</font>)</h1>
+<section id="title-slide" data-background-color="#000000" data-background-image="images/SoCal_RUG_logo.png" data-background-position="bottom 50px right 50px" data-background-size="360px" class="quarto-title-block center">
+  <h1 class="title">ETL with <font color="#fff100">Arrow</font> and <font color="#fff100">DuckDB</font></h1>
+  <p class="subtitle">SoCal RUG x UCI Hackathon - 2024.04.27</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Javier Orraca-Deatcu 
+<font color="#fff100">Javier Orraca-Deatcu</font> 
 </div>
 </div>
 </div>
 
 </section>
-<section id="posit-conference" class="slide level2">
-<h2>Posit Conference</h2>
-<p>Posit, formerly RStudio, hosts an <a href="https://posit.co/conference/">annual conference</a> including workshops, lunch-and-learns, and presentations touching on all things data science.</p>
+<section>
+<section id="data-manipulation" class="title-slide slide level1 center">
+<h1>1. Data Manipulation</h1>
+
+</section>
+<section id="clean-etl-with-r-python" class="slide level2">
+<h2>Clean ETL with R &amp; Python</h2>
+<h3 id="rs-dplyr">R’s <code>dplyr</code></h3>
+<ul>
+<li><code>dplyr</code> is a data manipulation package for R that offers SQL-like functions such as <code>select()</code>, <code>filter()</code>, <code>summarize()</code>, and more to simplify data tasks</li>
+</ul>
+<h3 id="pythons-pandas">Python’s <code>pandas</code></h3>
+<ul>
+<li><code>pandas</code> is a data analysis library in Python that supports the same kind of selecting, filtering, and manipulation tasks</li>
+</ul>
+<div class="footer">
+<p><a href="https://dplyr.tidyverse.org/">dplyr</a> for R | <a href="https://pandas.pydata.org/">pandas</a> for Python</p>
+</div>
+</section>
+<section id="clean-etl-with-r-python-1" class="slide level2">
+<h2>Clean ETL with R &amp; Python</h2>
+<ul>
+<li>Both libraries are essential for data manipulation and are designed to be intuitive and performant</li>
+</ul>
 <div class="fragment">
 <ul>
-<li>2023 conference was hosted in Chicago</li>
-<li>Approximately <span class="fragment highlight-teal">1,200</span> in-person attendees</li>
+<li>but first…</li>
 </ul>
-</div>
-<div class="fragment">
-<p>R represented the majority of the presentations but there was more Python content than in prior years</p>
 <div class="footer">
-<p>Posit | Learn more at <a href="https://posit.co/">https://posit.co/</a></p>
+<p><a href="https://dplyr.tidyverse.org/">dplyr</a> for R | <a href="https://pandas.pydata.org/">pandas</a> for Python</p>
 </div>
 </div>
 </section>
 <section class="slide level2">
 
 <div class="r-fit-text">
-<p>Conference</p>
+<p>we need</p>
 </div>
+</section>
+<section class="slide level2">
+
 <div class="r-fit-text">
-<p>Highlights</p>
+<p>data!</p>
 </div>
 </section>
-<section>
-<section id="quarto" class="title-slide slide level1 center">
-<h1>1. Quarto</h1>
+<section id="palmer-penguins" class="slide level2">
+<h2>Palmer Penguins</h2>
+
+<img data-src="images/lter_penguins.png" alt="Artwork by Allison Horst" class="r-stretch quarto-figure-center"><p class="caption">Artwork by Allison Horst | <a href="https://allisonhorst.github.io/palmerpenguins" class="uri">https://allisonhorst.github.io/palmerpenguins</a></p><div class="footer">
+<p><code>palmerpenguins</code> | Package available on <a href="https://dplyr.tidyverse.org/">CRAN for R</a> and <a href="https://pypi.org/project/palmerpenguins/">PyPI for Python</a></p>
+</div>
+</section>
+<section id="palmer-penguins-1" class="slide level2">
+<h2>Palmer Penguins</h2>
+<ul>
+<li>The following slides show examples in R and Python that make use of the <code>palmerpenguins</code> package</li>
+<li>This data contains measurements for three penguin species observed from 2007-2009 on three islands in the Palmer Archipelago, Antarctica</li>
+<li>The data was collected by the <a href="https://pal.lternet.edu/">Palmer Station Long Term Ecological Research Program</a>, part of the <a href="https://lternet.edu/">US Long Term Ecological Research Network</a></li>
+</ul>
 <div class="footer">
-<p>Just to clarify… That’s <strong>Quarto</strong>… <strong>Q-U-A-R-T-O</strong>, not #4 in Spanish (or “cuatro”).</p>
+<p><code>palmerpenguins</code> | Package available on <a href="https://dplyr.tidyverse.org/">CRAN for R</a> and <a href="https://pypi.org/project/palmerpenguins/">PyPI for Python</a></p>
 </div>
 </section>
-<section id="quarto-presentations" class="slide level2">
-<h2>Quarto Presentations <img data-src="hexes/quarto.svg" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
-<p>These web slides were built with <a href="https://quarto.org/">Quarto</a> and this section was copied almost entirely from Quarto’s Reveal.js demo documentation</p>
+<section id="palmer-penguins-2" class="slide level2">
+<h2>Palmer Penguins</h2>
+<ul>
+<li>Install <code>palmerpenguins</code> and load the curated data set</li>
+</ul>
 <div class="fragment">
-<p>The next few slides cover what you can do with Quarto and <a href="https://revealjs.com">Reveal.js</a> including:</p>
-<ul>
-<li>Presenting code and LaTeX equations</li>
-<li>Rendering code chunk computations in slide output</li>
-<li>Fancy transitions, animations, and code windows</li>
-</ul>
+<div class="panel-tabset">
+<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">R</a></li><li><a href="#tabset-1-2">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">install.packages</span>(<span class="st">"palmerpenguins"</span>)</span>
+<span id="cb1-2"><a href=""></a></span>
+<span id="cb1-3"><a href=""></a><span class="fu">library</span>(palmerpenguins)</span>
+<span id="cb1-4"><a href=""></a></span>
+<span id="cb1-5"><a href=""></a>penguins_df <span class="ot">&lt;-</span> palmerpenguins<span class="sc">::</span>penguins</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-1-2">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href=""></a>pip install palmerpenguins</span>
+<span id="cb2-2"><a href=""></a></span>
+<span id="cb2-3"><a href=""></a><span class="im">from</span> palmerpenguins <span class="im">import</span> load_penguins</span>
+<span id="cb2-4"><a href=""></a></span>
+<span id="cb2-5"><a href=""></a>penguins_df <span class="op">=</span> load_penguins()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
 <div class="footer">
-<p>Quarto | Learn more on Quarto’s Reveal.js <a href="https://github.com/quarto-dev/quarto-web/blob/main/docs/presentations/revealjs/demo/index.qmd">demo presentation</a></p>
+<p><code>palmerpenguins</code> | Package available on <a href="https://dplyr.tidyverse.org/">CRAN for R</a> and <a href="https://pypi.org/project/palmerpenguins/">PyPI for Python</a></p>
 </div>
 </div>
 </section>
-<section id="pretty-code" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Pretty Code</h2>
-<ul>
-<li>Over 20 syntax highlighting themes available</li>
-<li>Default theme optimized for accessibility</li>
-</ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb1-1" class="hljs-ln-code"><a href="#cb1-1"></a><span class="co"># Define a server for the Shiny app</span></span>
-<span id="cb1-2" class="hljs-ln-code"><a href="#cb1-2"></a><span class="cf">function</span>(input, output) {</span>
-<span id="cb1-3" class="hljs-ln-code"><a href="#cb1-3"></a>  </span>
-<span id="cb1-4" class="hljs-ln-code"><a href="#cb1-4"></a>  <span class="co"># Fill in the spot we created for a plot</span></span>
-<span id="cb1-5" class="hljs-ln-code"><a href="#cb1-5"></a>  output<span class="sc">$</span>phonePlot <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>({</span>
-<span id="cb1-6" class="hljs-ln-code"><a href="#cb1-6"></a>    <span class="co"># Render a barplot</span></span>
-<span id="cb1-7" class="hljs-ln-code"><a href="#cb1-7"></a>  })</span>
-<span id="cb1-8" class="hljs-ln-code"><a href="#cb1-8"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="take-a-glimpse-at-the-data" class="slide level2">
+<h2>Take a <code>glimpse()</code> at the Data</h2>
+<div class="panel-tabset">
+<ul id="tabset-2" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-2-1">R</a></li><li><a href="#tabset-2-2">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb3-2"><a href=""></a></span>
+<span id="cb3-3"><a href=""></a><span class="fu">glimpse</span>(penguins_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 344
+Columns: 8
+$ species           &lt;fct&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…
+$ island            &lt;fct&gt; Torgersen, Torgersen, Torgersen, Torgersen, Torgerse…
+$ bill_length_mm    &lt;dbl&gt; 39.1, 39.5, 40.3, NA, 36.7, 39.3, 38.9, 39.2, 34.1, …
+$ bill_depth_mm     &lt;dbl&gt; 18.7, 17.4, 18.0, NA, 19.3, 20.6, 17.8, 19.6, 18.1, …
+$ flipper_length_mm &lt;int&gt; 181, 186, 195, NA, 193, 190, 181, 195, 193, 190, 186…
+$ body_mass_g       &lt;int&gt; 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, …
+$ sex               &lt;fct&gt; male, female, female, NA, female, male, female, male…
+$ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-2-2">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href=""></a><span class="bu">print</span>(penguins_df.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
 <div class="footer">
-<p>Quarto | <a href="https://quarto.org/docs/output-formats/html-code.html#highlighting">Syntax Highlighting</a></p>
+<p><code>palmerpenguins</code> | Package available on <a href="https://dplyr.tidyverse.org/">CRAN for R</a> and <a href="https://pypi.org/project/palmerpenguins/">PyPI for Python</a></p>
 </div>
 </section>
-<section id="code-animations" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Code Animations</h2>
-<ul>
-<li>Over 20 syntax highlighting themes available</li>
-<li>Default theme optimized for accessibility</li>
-</ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb2-1" class="hljs-ln-code"><a href="#cb2-1"></a><span class="co"># Define a server for the Shiny app</span></span>
-<span id="cb2-2" class="hljs-ln-code"><a href="#cb2-2"></a><span class="cf">function</span>(input, output) {</span>
-<span id="cb2-3" class="hljs-ln-code"><a href="#cb2-3"></a>  </span>
-<span id="cb2-4" class="hljs-ln-code"><a href="#cb2-4"></a>  <span class="co"># Fill in the spot we created for a plot</span></span>
-<span id="cb2-5" class="hljs-ln-code"><a href="#cb2-5"></a>  output<span class="sc">$</span>phonePlot <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>({</span>
-<span id="cb2-6" class="hljs-ln-code"><a href="#cb2-6"></a>    <span class="co"># Render a barplot</span></span>
-<span id="cb2-7" class="hljs-ln-code"><a href="#cb2-7"></a>    <span class="fu">barplot</span>(WorldPhones[,input<span class="sc">$</span>region]<span class="sc">*</span><span class="dv">1000</span>, </span>
-<span id="cb2-8" class="hljs-ln-code"><a href="#cb2-8"></a>            <span class="at">main=</span>input<span class="sc">$</span>region,</span>
-<span id="cb2-9" class="hljs-ln-code"><a href="#cb2-9"></a>            <span class="at">ylab=</span><span class="st">"Number of Telephones"</span>,</span>
-<span id="cb2-10" class="hljs-ln-code"><a href="#cb2-10"></a>            <span class="at">xlab=</span><span class="st">"Year"</span>)</span>
-<span id="cb2-11" class="hljs-ln-code"><a href="#cb2-11"></a>  })</span>
-<span id="cb2-12" class="hljs-ln-code"><a href="#cb2-12"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="footer">
-<p>Quarto | <a href="https://quarto.org/docs/presentations/revealjs/advanced.html#code-animations">Code Animations</a></p>
-</div>
-</section>
-<section id="line-highlighting" class="slide level2">
-<h2>Line Highlighting</h2>
-<ul>
-<li>Highlight specific lines for emphasis</li>
-<li>Incrementally highlight additional lines</li>
-</ul>
-<div class="sourceCode" id="cb3" data-code-line-numbers="4-5|7|10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb3-3"><a href="#cb3-3"></a></span>
-<span id="cb3-4"><a href="#cb3-4"></a>r <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="dv">2</span>, <span class="fl">0.01</span>)</span>
-<span id="cb3-5"><a href="#cb3-5"></a>theta <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> r</span>
-<span id="cb3-6"><a href="#cb3-6"></a>fig, ax <span class="op">=</span> plt.subplots(subplot_kw<span class="op">=</span>{<span class="st">'projection'</span>: <span class="st">'polar'</span>})</span>
-<span id="cb3-7"><a href="#cb3-7"></a>ax.plot(theta, r)</span>
-<span id="cb3-8"><a href="#cb3-8"></a>ax.set_rticks([<span class="fl">0.5</span>, <span class="dv">1</span>, <span class="fl">1.5</span>, <span class="dv">2</span>])</span>
-<span id="cb3-9"><a href="#cb3-9"></a>ax.grid(<span class="va">True</span>)</span>
-<span id="cb3-10"><a href="#cb3-10"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="footer">
-<p>Quarto | <a href="https://quarto.org/docs/presentations/revealjs/#line-highlighting">Line Highlighting</a></p>
-</div>
-</section>
-<section id="code-windows" class="slide level2">
-<h2>Code Windows</h2>
+<section id="functions-well-explore" class="slide level2">
+<h2>Functions We’ll Explore</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div class="codewindow quarto">
-<p>index.qmd</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">---</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="an">title:</span><span class="co"> "HTML document"</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="an">format:</span><span class="co"> html</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="co">---</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a></span>
-<span id="cb4-6"><a href="#cb4-6"></a><span class="fu">## Quarto</span></span>
-<span id="cb4-7"><a href="#cb4-7"></a></span>
-<span id="cb4-8"><a href="#cb4-8"></a>Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <span class="ot">&lt;https://quarto.org&gt;</span>.</span>
-<span id="cb4-9"><a href="#cb4-9"></a></span>
-<span id="cb4-10"><a href="#cb4-10"></a><span class="fu">## Running Code</span></span>
-<span id="cb4-11"><a href="#cb4-11"></a></span>
-<span id="cb4-12"><a href="#cb4-12"></a>When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:</span>
-<span id="cb4-13"><a href="#cb4-13"></a></span>
-<span id="cb4-14"><a href="#cb4-14"></a>::: {.cell}</span>
-<span id="cb4-15"><a href="#cb4-15"></a></span>
-<span id="cb4-16"><a href="#cb4-16"></a>:::</span>
-<span id="cb4-17"><a href="#cb4-17"></a></span>
-<span id="cb4-18"><a href="#cb4-18"></a>You can add options to executable code like this</span>
-<span id="cb4-19"><a href="#cb4-19"></a></span>
-<span id="cb4-20"><a href="#cb4-20"></a>::: {.cell}</span>
-<span id="cb4-21"><a href="#cb4-21"></a></span>
-<span id="cb4-22"><a href="#cb4-22"></a>:::</span>
-<span id="cb4-23"><a href="#cb4-23"></a></span>
-<span id="cb4-24"><a href="#cb4-24"></a>The <span class="in">`echo: false`</span> option disables the printing of code (only output is displayed).</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<ul>
+<li>select</li>
+<li>filter</li>
+<li>arrange</li>
+</ul>
 </div><div class="column" style="width:50%;">
-<div class="codewindow html">
-<p>index.html <iframe class="slide-deck" src="./codewindow_files/example.html" style="width: 100%; height: 484.47px;"></iframe></p>
-</div>
+<ul>
+<li>mutate</li>
+<li>group_by</li>
+<li>summarize</li>
+</ul>
 </div>
 </div>
 <div class="footer">
-<p>Quarto | <a href="https://github.com/EmilHvitfeldt/quarto-revealjs-codewindow">codewindow</a> Reveal.js extension &amp; example code above from Emil Hvitfeldt’s <a href="https://github.com/EmilHvitfeldt/talk-quarto-theming-positconf">Quarto Theming Talk at Posit Conf</a></p>
+<p>dplyr | Learn more about <a href="https://dplyr.tidyverse.org/">dplyr</a></p>
 </div>
 </section>
-<section id="counters" class="slide level2">
-<h2>Counters</h2>
-<p>Great for training purposes or when you’ve got a time limit</p>
-<div class="columns">
-<div class="column" style="width:50%;">
+<section id="select" class="slide level2">
+<h2>select</h2>
+<ul>
+<li>Subset <em>columns</em> with the <code>select()</code> function</li>
+</ul>
+<div class="fragment">
+<div class="panel-tabset">
+<ul id="tabset-3" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-3-1">R</a></li><li><a href="#tabset-3-2">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># YOUR TURN! Complete the below </span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="co"># dplyr pipeline to group by and</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="co"># summarize the data set</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a></span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb5-6"><a href="#cb5-6"></a><span class="fu">data</span>(<span class="at">package =</span> <span class="st">"ggplot2"</span>, <span class="st">"diamonds"</span>)</span>
-<span id="cb5-7"><a href="#cb5-7"></a></span>
-<span id="cb5-8"><a href="#cb5-8"></a>diamonds <span class="sc">|&gt;</span> </span>
-<span id="cb5-9"><a href="#cb5-9"></a>  <span class="er">&lt;</span>your code here<span class="sc">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6" data-code-line-numbers="1-4|2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a>penguins_mod <span class="ot">&lt;-</span> penguins_df <span class="sc">|&gt;</span> </span>
+<span id="cb6-2"><a href=""></a>  <span class="fu">select</span>(species, sex)</span>
+<span id="cb6-3"><a href=""></a></span>
+<span id="cb6-4"><a href=""></a><span class="fu">glimpse</span>(penguins_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 344
+Columns: 2
+$ species &lt;fct&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adelie…
+$ sex     &lt;fct&gt; male, female, female, NA, female, male, female, male, NA, NA, …</code></pre>
 </div>
-</div><div class="column" style="width:50%;">
+</div>
+</div>
+<div id="tabset-3-2">
 <div class="cell">
-<details>
-<summary>See {countdown} code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">library</span>(countdown)</span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="fu">countdown</span>(</span>
-<span id="cb6-3"><a href="#cb6-3"></a>  <span class="at">minutes =</span> <span class="dv">0</span>, </span>
-<span id="cb6-4"><a href="#cb6-4"></a>  <span class="at">seconds =</span> <span class="dv">10</span>,</span>
-<span id="cb6-5"><a href="#cb6-5"></a>  <span class="at">play_sound =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb6-6"><a href="#cb6-6"></a>  <span class="at">color_border =</span> <span class="st">"#1A4064"</span>,</span>
-<span id="cb6-7"><a href="#cb6-7"></a>  <span class="at">color_text =</span> <span class="st">"#76AADB"</span>,</span>
-<span id="cb6-8"><a href="#cb6-8"></a>  <span class="at">font_size =</span> <span class="st">"3em"</span></span>
-<span id="cb6-9"><a href="#cb6-9"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href=""></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb8-2"><a href=""></a></span>
+<span id="cb8-3"><a href=""></a>penguins_mod <span class="op">=</span> penguins_df[[<span class="st">'species'</span>, <span class="st">'sex'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-</div>
-<div class="cell">
-<div class="cell-output-display">
-<div class="countdown" id="timer_994eb78e" data-update-every="1" data-play-sound="true" tabindex="0" style="right:25%;bottom:5%;font-size:3em;">
-<div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
-<code class="countdown-time"><span class="countdown-digits minutes">00</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">10</span></code>
 </div>
 </div>
 </div>
 <div class="footer">
-<p>Quarto | Learn more about the <a href="https://pkg.garrickadenbuie.com/countdown/">countdown</a> package</p>
+<p>dplyr | Learn more about <a href="https://dplyr.tidyverse.org/articles/dplyr.html#select-columns-with-select">select()</a></p>
+</div>
+</div>
+</section>
+<section id="select-1" class="slide level2">
+<h2>select</h2>
+<ul>
+<li>Using the column (or “variable”) names, <code>select()</code> let us easily subset the data</li>
+</ul>
+
+<img data-src="images/select.svg" class="r-stretch quarto-figure-center"><p class="caption">Image credit: Duke University <a href="https://intro2r.library.duke.edu/wrangle.html" class="uri">https://intro2r.library.duke.edu/wrangle.html</a></p><div class="footer">
+<p>dplyr | Learn more about <a href="https://dplyr.tidyverse.org/articles/dplyr.html#select-columns-with-select">select()</a></p>
+</div>
+</section>
+<section id="filter" class="slide level2">
+<h2>filter</h2>
+<ul>
+<li>Subset <em>rows</em> with the <code>filter()</code> function</li>
+</ul>
+<div class="fragment">
+<div class="panel-tabset">
+<ul id="tabset-4" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-4-1">R</a></li><li><a href="#tabset-4-2">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" data-code-line-numbers="1-5|2-3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a>penguins_mod <span class="ot">&lt;-</span> penguins_df <span class="sc">|&gt;</span> </span>
+<span id="cb9-2"><a href=""></a>  <span class="fu">filter</span>(sex <span class="sc">==</span> <span class="st">"female"</span>,</span>
+<span id="cb9-3"><a href=""></a>         bill_length_mm <span class="sc">&lt;=</span> <span class="dv">40</span>)</span>
+<span id="cb9-4"><a href=""></a></span>
+<span id="cb9-5"><a href=""></a><span class="fu">glimpse</span>(penguins_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 66
+Columns: 8
+$ species           &lt;fct&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…
+$ island            &lt;fct&gt; Torgersen, Torgersen, Torgersen, Torgersen, Torgerse…
+$ bill_length_mm    &lt;dbl&gt; 39.5, 36.7, 38.9, 36.6, 38.7, 34.4, 37.8, 35.9, 35.3…
+$ bill_depth_mm     &lt;dbl&gt; 17.4, 19.3, 17.8, 17.8, 19.0, 18.4, 18.3, 19.2, 18.9…
+$ flipper_length_mm &lt;int&gt; 186, 193, 181, 185, 195, 184, 174, 189, 187, 172, 17…
+$ body_mass_g       &lt;int&gt; 3800, 3450, 3625, 3700, 3450, 3325, 3400, 3800, 3800…
+$ sex               &lt;fct&gt; female, female, female, female, female, female, fema…
+$ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-4-2">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href=""></a>penguins_mod <span class="op">=</span> penguins_df[</span>
+<span id="cb11-2"><a href=""></a>    (penguins_df[<span class="st">'sex'</span>] <span class="op">==</span> <span class="st">'female'</span>) <span class="op">&amp;</span></span>
+<span id="cb11-3"><a href=""></a>    (penguins_df[<span class="st">'bill_length_mm'</span>] <span class="op">&lt;=</span> <span class="dv">40</span>)</span>
+<span id="cb11-4"><a href=""></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="footer">
+<p>dplyr | Learn more about <a href="https://dplyr.tidyverse.org/articles/dplyr.html#filter-rows-with-filter">filter()</a></p>
+</div>
+</div>
+</section>
+<section id="filter-1" class="slide level2">
+<h2>filter</h2>
+<ul>
+<li>The <code>filter()</code> function let’s us keep rows where the provided expression(s) are <code>TRUE</code></li>
+</ul>
+
+<img data-src="images/filter_by_rows.svg" class="r-stretch quarto-figure-center"><p class="caption">Image credit: Duke University <a href="https://intro2r.library.duke.edu/wrangle.html" class="uri">https://intro2r.library.duke.edu/wrangle.html</a></p><div class="footer">
+<p>dplyr | Learn more about <a href="https://dplyr.tidyverse.org/articles/dplyr.html#filter-rows-with-filter">filter()</a></p>
+</div>
+</section>
+<section id="arrange" class="slide level2">
+<h2>arrange</h2>
+<ul>
+<li>Sorting rows by column names can be accomplished with the <code>arrange()</code> function</li>
+<li>In the example on the next slide, we’ll sort the data by <code>bill_length_mm</code> ascending and by <code>year</code> descending</li>
+</ul>
+<div class="footer">
+<p>dplyr | Learn more about <a href="https://dplyr.tidyverse.org/articles/dplyr.html#arrange-rows-with-arrange">arrange()</a></p>
+</div>
+</section>
+<section id="arrange-1" class="slide level2">
+<h2>arrange</h2>
+<div class="panel-tabset">
+<ul id="tabset-5" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-5-1">R</a></li><li><a href="#tabset-5-2">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12" data-code-line-numbers="1-4|2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a>penguins_mod <span class="ot">&lt;-</span> penguins_df <span class="sc">|&gt;</span> </span>
+<span id="cb12-2"><a href=""></a>  <span class="fu">arrange</span>(bill_length_mm, <span class="fu">desc</span>(year))</span>
+<span id="cb12-3"><a href=""></a></span>
+<span id="cb12-4"><a href=""></a><span class="fu">glimpse</span>(penguins_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 344
+Columns: 8
+$ species           &lt;fct&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…
+$ island            &lt;fct&gt; Dream, Dream, Torgersen, Dream, Torgersen, Torgersen…
+$ bill_length_mm    &lt;dbl&gt; 32.1, 33.1, 33.5, 34.0, 34.1, 34.4, 34.5, 34.6, 34.6…
+$ bill_depth_mm     &lt;dbl&gt; 15.5, 16.1, 19.0, 17.1, 18.1, 18.4, 18.1, 17.2, 21.1…
+$ flipper_length_mm &lt;int&gt; 188, 178, 190, 185, 193, 184, 187, 189, 198, 192, 19…
+$ body_mass_g       &lt;int&gt; 3050, 2900, 3600, 3400, 3475, 3325, 2900, 3200, 4400…
+$ sex               &lt;fct&gt; female, female, female, female, NA, female, female, …
+$ year              &lt;int&gt; 2009, 2008, 2008, 2008, 2007, 2007, 2008, 2008, 2007…</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-5-2">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href=""></a>penguins_mod <span class="op">=</span> penguins_df.sort_values(</span>
+<span id="cb14-2"><a href=""></a>    by<span class="op">=</span>[<span class="st">'bill_length_mm'</span>, <span class="st">'year'</span>], </span>
+<span id="cb14-3"><a href=""></a>    ascending<span class="op">=</span>[<span class="va">True</span>, <span class="va">False</span>]</span>
+<span id="cb14-4"><a href=""></a>)</span>
+<span id="cb14-5"><a href=""></a></span>
+<span id="cb14-6"><a href=""></a><span class="bu">print</span>(penguins_mod.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="footer">
+<p>dplyr | Learn more about <a href="https://dplyr.tidyverse.org/articles/dplyr.html#arrange-rows-with-arrange">arrange()</a></p>
+</div>
+</section>
+<section id="arrange-2" class="slide level2">
+<h2>arrange</h2>
+<ul>
+<li>The <code>arrange()</code> function sorts rows in order of one or more columns</li>
+<li>You can arrange in ascending order (the default) or descending order by wrapping the column name in <code>desc()</code></li>
+</ul>
+
+<img data-src="images/arrange_rows.svg" class="r-stretch quarto-figure-center"><p class="caption">Image credit: Duke University <a href="https://intro2r.library.duke.edu/wrangle.html" class="uri">https://intro2r.library.duke.edu/wrangle.html</a></p><div class="footer">
+<p>dplyr | Learn more about <a href="https://dplyr.tidyverse.org/articles/dplyr.html#arrange-rows-with-arrange">arrange()</a></p>
+</div>
+</section>
+<section id="mutate" class="slide level2">
+<h2>mutate</h2>
+<ul>
+<li>Create or modify columns with <code>mutate()</code></li>
+</ul>
+<div class="fragment">
+<div class="panel-tabset">
+<ul id="tabset-6" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-6-1">R</a></li><li><a href="#tabset-6-2">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-6-1">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" data-code-line-numbers="1-4|2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a>penguins_mod <span class="ot">&lt;-</span> penguins_df <span class="sc">|&gt;</span> </span>
+<span id="cb15-2"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">body_mass_kg =</span> body_mass_g <span class="sc">*</span> <span class="dv">1000</span>)</span>
+<span id="cb15-3"><a href=""></a></span>
+<span id="cb15-4"><a href=""></a><span class="fu">glimpse</span>(penguins_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 344
+Columns: 9
+$ species           &lt;fct&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…
+$ island            &lt;fct&gt; Torgersen, Torgersen, Torgersen, Torgersen, Torgerse…
+$ bill_length_mm    &lt;dbl&gt; 39.1, 39.5, 40.3, NA, 36.7, 39.3, 38.9, 39.2, 34.1, …
+$ bill_depth_mm     &lt;dbl&gt; 18.7, 17.4, 18.0, NA, 19.3, 20.6, 17.8, 19.6, 18.1, …
+$ flipper_length_mm &lt;int&gt; 181, 186, 195, NA, 193, 190, 181, 195, 193, 190, 186…
+$ body_mass_g       &lt;int&gt; 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, …
+$ sex               &lt;fct&gt; male, female, female, NA, female, male, female, male…
+$ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…
+$ body_mass_kg      &lt;dbl&gt; 3750000, 3800000, 3250000, NA, 3450000, 3650000, 362…</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-6-2">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href=""></a>penguins_mod <span class="op">=</span> penguins_df.assign(</span>
+<span id="cb17-2"><a href=""></a>    body_mass_kg <span class="op">=</span> penguins_df[<span class="st">'body_mass_g'</span>] <span class="op">*</span> <span class="dv">1000</span></span>
+<span id="cb17-3"><a href=""></a>)</span>
+<span id="cb17-4"><a href=""></a></span>
+<span id="cb17-5"><a href=""></a><span class="bu">print</span>(penguins_mod.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="footer">
+<p>dplyr | Learn more about <a href="https://dplyr.tidyverse.org/articles/dplyr.html#add-new-columns-with-mutate">mutate()</a></p>
+</div>
+</div>
+</section>
+<section id="mutate-1" class="slide level2">
+<h2>mutate</h2>
+<ul>
+<li>Add new columns to your dataframe or tibble with <code>mutate()</code></li>
+<li>dplyr’s <code>mutate()</code> is similar to base R’s <code>transform()</code> with the added benefit of being able to reference columns you’ve just created</li>
+</ul>
+
+<img data-src="images/mutate.svg" class="r-stretch quarto-figure-center"><p class="caption">Image credit: Duke University <a href="https://intro2r.library.duke.edu/wrangle.html" class="uri">https://intro2r.library.duke.edu/wrangle.html</a></p><div class="footer">
+<p>dplyr | Learn more about <a href="https://dplyr.tidyverse.org/articles/dplyr.html#add-new-columns-with-mutate">mutate()</a></p>
+</div>
+</section>
+<section id="group_by-and-summarize" class="slide level2">
+<h2>group_by and summarize</h2>
+<ul>
+<li><code>group_by()</code> variables and <code>summarize()</code> results</li>
+</ul>
+<div class="fragment">
+<div class="panel-tabset">
+<ul id="tabset-7" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-7-1">R</a></li><li><a href="#tabset-7-2">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-7-1">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18" data-code-line-numbers="1-5|2-3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a>penguins_mod <span class="ot">&lt;-</span> penguins_df <span class="sc">|&gt;</span> </span>
+<span id="cb18-2"><a href=""></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span> </span>
+<span id="cb18-3"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">mean_mass_g =</span> <span class="fu">mean</span>(body_mass_g, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb18-4"><a href=""></a></span>
+<span id="cb18-5"><a href=""></a><span class="fu">glimpse</span>(penguins_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 3
+Columns: 2
+$ sex         &lt;fct&gt; female, male, NA
+$ mean_mass_g &lt;dbl&gt; 3862.273, 4545.685, 4005.556</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-7-2">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href=""></a>grouped <span class="op">=</span> penguins_df.groupby(<span class="st">'sex'</span>)[<span class="st">'body_mass_g'</span>].transform(<span class="kw">lambda</span> x: x.mean(skipna<span class="op">=</span><span class="va">True</span>))</span>
+<span id="cb20-2"><a href=""></a></span>
+<span id="cb20-3"><a href=""></a>penguins_mod <span class="op">=</span> penguins_df.assign(mean_mass_g<span class="op">=</span>grouped)</span>
+<span id="cb20-4"><a href=""></a></span>
+<span id="cb20-5"><a href=""></a><span class="bu">print</span>(penguins_mod.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="footer">
+<p>dplyr | Learn more about <a href="https://dplyr.tidyverse.org/articles/dplyr.html#summarize">summarize()</a></p>
+</div>
+</div>
+</section>
+<section id="group_by-and-summarize-1" class="slide level2">
+<h2>group_by and summarize</h2>
+<ul>
+<li><code>summarize()</code> creates a new data frame</li>
+<li>it returns one row for each combination of grouping variables</li>
+<li>if there are no grouping variables, the output will have a single row summarizing all observations in the input</li>
+</ul>
+<div class="footer">
+<p>dplyr | Learn more about <a href="https://dplyr.tidyverse.org/articles/dplyr.html#summarize">summarize()</a></p>
+</div>
+</section>
+<section id="chaining-methods" class="slide level2">
+<h2>Chaining Methods</h2>
+<ul>
+<li>In R, the native pipe operator (<code>|&gt;</code>) or magrittr pipe (<code>%&gt;%</code>) can be used to chain or pipe dplyr functions together</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a>penguins_mod <span class="ot">&lt;-</span> penguins_df <span class="sc">|&gt;</span> </span>
+<span id="cb21-2"><a href=""></a>  <span class="fu">select</span>(sex, bill_length_mm, body_mass_g) <span class="sc">|&gt;</span> </span>
+<span id="cb21-3"><a href=""></a>  <span class="fu">filter</span>(sex <span class="sc">==</span> <span class="st">"female"</span>,</span>
+<span id="cb21-4"><a href=""></a>         bill_length_mm <span class="sc">&gt;</span> <span class="dv">30</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb21-5"><a href=""></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span> </span>
+<span id="cb21-6"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">mean_mass_g =</span> <span class="fu">mean</span>(body_mass_g, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb21-7"><a href=""></a></span>
+<span id="cb21-8"><a href=""></a><span class="fu">glimpse</span>(penguins_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 1
+Columns: 2
+$ sex         &lt;fct&gt; female
+$ mean_mass_g &lt;dbl&gt; 3862.273</code></pre>
+</div>
+</div>
+<div class="footer">
+<p>dplyr | Learn more about <a href="https://dplyr.tidyverse.org/articles/dplyr.html#the-pipe">piping</a></p>
+</div>
+</section>
+<section id="chaining-methods-1" class="slide level2">
+<h2>Chaining Methods</h2>
+<ul>
+<li>In Python, the period (<code>.</code>) is used as the chain functions together</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href=""></a>selected <span class="op">=</span> penguins_df[[<span class="st">'sex'</span>, <span class="st">'bill_length_mm'</span>, <span class="st">'body_mass_g'</span>]]</span>
+<span id="cb23-2"><a href=""></a></span>
+<span id="cb23-3"><a href=""></a>filtered <span class="op">=</span> selected[(selected[<span class="st">'sex'</span>] <span class="op">==</span> <span class="st">'female'</span>) <span class="op">&amp;</span> (selected[<span class="st">'bill_length_mm'</span>] <span class="op">&gt;</span> <span class="dv">30</span>)]</span>
+<span id="cb23-4"><a href=""></a></span>
+<span id="cb23-5"><a href=""></a>penguins_mod <span class="op">=</span> filtered.groupby(<span class="st">'sex'</span>).agg(mean_mass_g<span class="op">=</span>(<span class="st">'body_mass_g'</span>, <span class="st">'mean'</span>)).reset_index()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section></section>
 <section>
 <section id="arrow" class="title-slide slide level1 center">
 <h1>2. Arrow</h1>
 <div class="footer">
-<p>Arrow | Learn more at <a href="https://arrow.apache.org/">https://arrow.apache.org/</a></p>
+<p>Arrow | Learn more at <a href="https://arrow.apache.org/" class="uri">https://arrow.apache.org/</a></p>
 </div>
 </section>
 <section id="larger-than-memory-data" class="slide level2">
 <h2>Larger-than-Memory Data</h2>
 <p><br> <img data-src="images/apache_arrow.png"></p>
 <div class="footer">
-<p>Arrow | Learn more at <a href="https://arrow.apache.org/">https://arrow.apache.org/</a></p>
+<p>Arrow | Learn more at <a href="https://arrow.apache.org/" class="uri">https://arrow.apache.org/</a></p>
 </div>
 </section>
 <section id="arrow-and-parquet" class="slide level2">
@@ -637,7 +906,7 @@ Javier Orraca-Deatcu
           display:block!important;
       }</style></aside>
 <div class="footer">
-<p>Arrow | Learn more at <a href="https://arrow.apache.org/">https://arrow.apache.org/</a></p>
+<p>Arrow | Learn more at <a href="https://arrow.apache.org/" class="uri">https://arrow.apache.org/</a></p>
 </div>
 </section>
 <section id="how-fast-is-fast" class="slide level2">
@@ -651,89 +920,89 @@ Javier Orraca-Deatcu
 </ul>
 </div>
 <div class="footer">
-<p>Arrow | Learn more at <a href="https://arrow.apache.org/">https://arrow.apache.org/</a></p>
+<p>Arrow | Learn more at <a href="https://arrow.apache.org/" class="uri">https://arrow.apache.org/</a></p>
 </div>
 </section>
 <section id="benchmarking-read-times" class="slide level2">
 <h2>Benchmarking Read Times <img data-src="hexes/ggplot2.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "> <img data-src="hexes/arrow.png" class="absolute" style="top: -20px; right: 64px; width: 64px; height: 74.24px; "></h2>
-<div class="codewindow r">
-<p>benchmark_arrow_read.R</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu"># 0. Load Libraries to Download &amp; Benchmark Data</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a>library(here)</span>
-<span id="cb7-3"><a href="#cb7-3"></a>library(arrow)</span>
-<span id="cb7-4"><a href="#cb7-4"></a>library(dplyr)</span>
-<span id="cb7-5"><a href="#cb7-5"></a>library(ggplot2)</span>
-<span id="cb7-6"><a href="#cb7-6"></a>library(bench)</span>
-<span id="cb7-7"><a href="#cb7-7"></a></span>
-<span id="cb7-8"><a href="#cb7-8"></a><span class="fu"># 1. NYC Taxi Data download (40 GB)</span></span>
-<span id="cb7-9"><a href="#cb7-9"></a>data_path &lt;- here::here("data/nyc-taxi")</span>
-<span id="cb7-10"><a href="#cb7-10"></a></span>
-<span id="cb7-11"><a href="#cb7-11"></a>open_dataset("s3://voltrondata-labs-datasets/nyc-taxi") |&gt;</span>
-<span id="cb7-12"><a href="#cb7-12"></a>  filter(year %in% 2012:2021) |&gt; </span>
-<span id="cb7-13"><a href="#cb7-13"></a>  write_dataset(data_path, partitioning = c("year", "month"))</span>
-<span id="cb7-14"><a href="#cb7-14"></a></span>
-<span id="cb7-15"><a href="#cb7-15"></a><span class="fu"># 2. Benchmark Read Times</span></span>
-<span id="cb7-16"><a href="#cb7-16"></a>bnch &lt;- bench::mark(</span>
-<span id="cb7-17"><a href="#cb7-17"></a>  min_iterations = 1000,</span>
-<span id="cb7-18"><a href="#cb7-18"></a>  arrow = open_dataset(here::here("data/nyc-taxi"))</span>
-<span id="cb7-19"><a href="#cb7-19"></a>)</span>
-<span id="cb7-20"><a href="#cb7-20"></a></span>
-<span id="cb7-21"><a href="#cb7-21"></a>autoplot(bnch)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a><span class="fu">library</span>(here)</span>
+<span id="cb24-2"><a href=""></a><span class="fu">library</span>(arrow)</span>
+<span id="cb24-3"><a href=""></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb24-4"><a href=""></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb24-5"><a href=""></a><span class="fu">library</span>(bench)</span>
+<span id="cb24-6"><a href=""></a></span>
+<span id="cb24-7"><a href=""></a><span class="co"># NYC Taxi Data download (40 GB)</span></span>
+<span id="cb24-8"><a href=""></a>data_path <span class="ot">&lt;-</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/nyc-taxi"</span>)</span>
+<span id="cb24-9"><a href=""></a></span>
+<span id="cb24-10"><a href=""></a><span class="fu">open_dataset</span>(<span class="st">"s3://voltrondata-labs-datasets/nyc-taxi"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb24-11"><a href=""></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="dv">2012</span><span class="sc">:</span><span class="dv">2021</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb24-12"><a href=""></a>  <span class="fu">write_dataset</span>(data_path, <span class="at">partitioning =</span> <span class="fu">c</span>(<span class="st">"year"</span>, <span class="st">"month"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="footer">
-<p>Arrow | Learn more at <a href="https://arrow.apache.org/">https://arrow.apache.org/</a></p>
+<p>Arrow | Learn more at <a href="https://arrow.apache.org/" class="uri">https://arrow.apache.org/</a></p>
 </div>
 </section>
 <section id="benchmarking-read-times-1" class="slide level2">
 <h2>Benchmarking Read Times <img data-src="hexes/ggplot2.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "> <img data-src="hexes/arrow.png" class="absolute" style="top: -20px; right: 64px; width: 64px; height: 74.24px; "></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a><span class="co"># 2. Benchmark Read Times</span></span>
+<span id="cb25-2"><a href=""></a>bnch <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb25-3"><a href=""></a>  <span class="at">min_iterations =</span> <span class="dv">1000</span>,</span>
+<span id="cb25-4"><a href=""></a>  <span class="at">arrow =</span> <span class="fu">open_dataset</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/nyc-taxi"</span>))</span>
+<span id="cb25-5"><a href=""></a>)</span>
+<span id="cb25-6"><a href=""></a></span>
+<span id="cb25-7"><a href=""></a><span class="fu">autoplot</span>(bnch)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="footer">
+<p>Arrow | Learn more at <a href="https://arrow.apache.org/" class="uri">https://arrow.apache.org/</a></p>
+</div>
+</section>
+<section id="benchmarking-read-times-2" class="slide level2">
+<h2>Benchmarking Read Times <img data-src="hexes/ggplot2.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "> <img data-src="hexes/arrow.png" class="absolute" style="top: -20px; right: 64px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>Results show read times from a 40GB parquet, 1.1 billion row dataset (benchmarked over 1,000 iterations)</li>
 </ul>
-<div id="fig-539a35d47e664c97a50115a146a7f1bd-1" class="quarto-figure quarto-figure-center" width="55%">
-<figure class="quarto-float quarto-float-fig">
-<div>
-<img data-src="images/arrow_read.png" id="fig-539a35d47e664c97a50115a146a7f1bd-1" style="width:55.0%">
-</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/arrow_read.png" class="quarto-figure quarto-figure-center" style="width:55.0%"></p>
 </figure>
 </div>
 <div class="footer">
-<p>Arrow | Learn more at <a href="https://arrow.apache.org/">https://arrow.apache.org/</a></p>
+<p>Arrow | Learn more at <a href="https://arrow.apache.org/" class="uri">https://arrow.apache.org/</a></p>
 </div>
 </section>
-<section id="benchmarking-dplyr" class="slide level2">
-<h2>Benchmarking dplyr <img data-src="hexes/ggplot2.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "> <img data-src="hexes/dplyr.png" class="absolute" style="top: -20px; right: 64px; width: 64px; height: 74.24px; "> <img data-src="hexes/arrow.png" class="absolute" style="top: -20px; right: 128px; width: 64px; height: 74.24px; "></h2>
-<div class="codewindow r">
-<p>benchmark_arrow_dplyr.R</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu"># 1. Open Arrow connection to dataset (40 GB)</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a>nyc_taxi &lt;- open_dataset(here::here("data/nyc-taxi"))</span>
-<span id="cb8-3"><a href="#cb8-3"></a></span>
-<span id="cb8-4"><a href="#cb8-4"></a><span class="fu"># 2. Benchmark dplyr pipeline</span></span>
-<span id="cb8-5"><a href="#cb8-5"></a>bnch &lt;- bench::mark(</span>
-<span id="cb8-6"><a href="#cb8-6"></a>  min_iterations = 10,</span>
-<span id="cb8-7"><a href="#cb8-7"></a>  arrow = nyc_taxi |&gt; </span>
-<span id="cb8-8"><a href="#cb8-8"></a>    dplyr::group_by(year) |&gt; </span>
-<span id="cb8-9"><a href="#cb8-9"></a>    dplyr::summarise(all_trips = n(),</span>
-<span id="cb8-10"><a href="#cb8-10"></a>                     shared_trips = sum(passenger_count &gt; 1, na.rm = T)) |&gt;</span>
-<span id="cb8-11"><a href="#cb8-11"></a>    dplyr::mutate(pct_shared = shared_trips / all_trips * 100) |&gt; </span>
-<span id="cb8-12"><a href="#cb8-12"></a>    dplyr::collect()</span>
-<span id="cb8-13"><a href="#cb8-13"></a>)</span>
-<span id="cb8-14"><a href="#cb8-14"></a></span>
-<span id="cb8-15"><a href="#cb8-15"></a>autoplot(bnch)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="arrow-dplyr-benchmark" class="slide level2">
+<h2>arrow + dplyr Benchmark <img data-src="hexes/ggplot2.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "> <img data-src="hexes/dplyr.png" class="absolute" style="top: -20px; right: 64px; width: 64px; height: 74.24px; "> <img data-src="hexes/arrow.png" class="absolute" style="top: -20px; right: 128px; width: 64px; height: 74.24px; "></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a><span class="co"># 1. Open Arrow connection to dataset (40 GB)</span></span>
+<span id="cb26-2"><a href=""></a>nyc_taxi <span class="ot">&lt;-</span> <span class="fu">open_dataset</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/nyc-taxi"</span>))</span>
+<span id="cb26-3"><a href=""></a></span>
+<span id="cb26-4"><a href=""></a><span class="co"># 2. Benchmark dplyr pipeline</span></span>
+<span id="cb26-5"><a href=""></a>bnch <span class="ot">&lt;-</span> bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb26-6"><a href=""></a>  <span class="at">min_iterations =</span> <span class="dv">10</span>,</span>
+<span id="cb26-7"><a href=""></a>  <span class="at">arrow =</span> nyc_taxi <span class="sc">|&gt;</span> </span>
+<span id="cb26-8"><a href=""></a>    dplyr<span class="sc">::</span><span class="fu">group_by</span>(year) <span class="sc">|&gt;</span> </span>
+<span id="cb26-9"><a href=""></a>    dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="at">all_trips =</span> <span class="fu">n</span>(),</span>
+<span id="cb26-10"><a href=""></a>                     <span class="at">shared_trips =</span> <span class="fu">sum</span>(passenger_count <span class="sc">&gt;</span> <span class="dv">1</span>, <span class="at">na.rm =</span> T)) <span class="sc">|&gt;</span></span>
+<span id="cb26-11"><a href=""></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">pct_shared =</span> shared_trips <span class="sc">/</span> all_trips <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb26-12"><a href=""></a>    dplyr<span class="sc">::</span><span class="fu">collect</span>()</span>
+<span id="cb26-13"><a href=""></a>)</span>
+<span id="cb26-14"><a href=""></a></span>
+<span id="cb26-15"><a href=""></a><span class="fu">autoplot</span>(bnch)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="footer">
 <p>Arrow | <a href="https://r4ds.hadley.nz/arrow.html">Arrow + dplyr compatibility</a></p>
 </div>
 </section>
-<section id="benchmarking-dplyr-1" class="slide level2">
-<h2>Benchmarking dplyr <img data-src="hexes/ggplot2.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "> <img data-src="hexes/dplyr.png" class="absolute" style="top: -20px; right: 64px; width: 64px; height: 74.24px; "> <img data-src="hexes/arrow.png" class="absolute" style="top: -20px; right: 128px; width: 64px; height: 74.24px; "></h2>
+<section id="arrow-dplyr-benchmark-1" class="slide level2">
+<h2>arrow + dplyr Benchmark <img data-src="hexes/ggplot2.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "> <img data-src="hexes/dplyr.png" class="absolute" style="top: -20px; right: 64px; width: 64px; height: 74.24px; "> <img data-src="hexes/arrow.png" class="absolute" style="top: -20px; right: 128px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>Arrow + dplyr summarized 1.1 billion rows in less than 5s (benchmarked over 10 iterations) to a 10 x 4 tibble</li>
 </ul>
-<div id="fig-539a35d47e664c97a50115a146a7f1bd-2" class="quarto-figure quarto-figure-center" width="55%">
-<figure class="quarto-float quarto-float-fig">
-<div>
-<img data-src="images/arrow_group_by.png" id="fig-539a35d47e664c97a50115a146a7f1bd-2" style="width:55.0%">
-</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/arrow_group_by.png" class="quarto-figure quarto-figure-center" style="width:55.0%"></p>
 </figure>
 </div>
 <div class="footer">
@@ -748,10 +1017,10 @@ Javier Orraca-Deatcu
 <li>Take this <code>stringr::str_replace_na()</code> example:</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9" data-code-line-numbers="1-4|3-4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>nyc_taxi <span class="sc">|&gt;</span> </span>
-<span id="cb9-2"><a href="#cb9-2"></a>  <span class="fu">mutate</span>(<span class="at">vendor_name =</span> <span class="fu">str_replace_na</span>(vendor_name, <span class="st">"No vendor"</span>))</span>
-<span id="cb9-3"><a href="#cb9-3"></a><span class="co">#&gt; Error: Expression str_replace_na(vendor_name, "No vendor") </span></span>
-<span id="cb9-4"><a href="#cb9-4"></a><span class="co">#&gt; not supported in Arrow</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27" data-code-line-numbers="1-4|3-4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a>nyc_taxi <span class="sc">|&gt;</span> </span>
+<span id="cb27-2"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">vendor_name =</span> <span class="fu">str_replace_na</span>(vendor_name, <span class="st">"No vendor"</span>))</span>
+<span id="cb27-3"><a href=""></a><span class="co">#&gt; Error: Expression str_replace_na(vendor_name, "No vendor") </span></span>
+<span id="cb27-4"><a href=""></a><span class="co">#&gt; not supported in Arrow</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <ul>
@@ -765,7 +1034,7 @@ Javier Orraca-Deatcu
 <section class="slide level2">
 
 
-<img data-src="images/crying_cat.gif" id="fig-539a35d47e664c97a50115a146a7f1bd-3" class="r-stretch quarto-figure-center"></section>
+<img data-src="images/crying_cat.gif" class="quarto-figure quarto-figure-center r-stretch"></section>
 <section class="slide level2">
 
 <div class="r-fit-text">
@@ -778,7 +1047,7 @@ Javier Orraca-Deatcu
 <section id="user-defined-functions" class="slide level2">
 <h2>User Defined Functions <img data-src="hexes/tidyverse.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "> <img data-src="hexes/stringr.png" class="absolute" style="top: -20px; right: 64px; width: 64px; height: 74.24px; "> <img data-src="hexes/dplyr.png" class="absolute" style="top: -20px; right: 128px; width: 64px; height: 74.24px; "> <img data-src="hexes/arrow.png" class="absolute" style="top: -20px; right: 192px; width: 64px; height: 74.24px; "></h2>
 <ul>
-<li>Lucky for us, Arrow allows us to create and register <em><strong>User Defined Functions (“UDFs”)</strong></em> to the Arrow engine</li>
+<li>Lucky for us, Arrow allows us to create and register <strong><em>User Defined Functions (“UDFs”)</em></strong> to the Arrow engine</li>
 <li>Almost any function can be made compatible with Arrow by registering custom UDFs</li>
 <li>Let’s learn how to register <code>str_replace_na()</code> with the Arrow kernel</li>
 </ul>
@@ -793,16 +1062,16 @@ Javier Orraca-Deatcu
 <li>Since I want to mutate the <code>vendor_name</code> field, I know I’ll be working with an Arrow <code>string()</code> data type</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10" data-code-line-numbers="1-10|3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>arrow<span class="sc">::</span><span class="fu">schema</span>(nyc_taxi)</span>
-<span id="cb10-2"><a href="#cb10-2"></a><span class="co">#&gt; Schema</span></span>
-<span id="cb10-3"><a href="#cb10-3"></a><span class="co">#&gt; vendor_name: string</span></span>
-<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt; pickup_datetime: timestamp[ms]</span></span>
-<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#&gt; dropoff_datetime: timestamp[ms]</span></span>
-<span id="cb10-6"><a href="#cb10-6"></a><span class="co">#&gt; passenger_count: int64</span></span>
-<span id="cb10-7"><a href="#cb10-7"></a><span class="co">#&gt; trip_distance: double</span></span>
-<span id="cb10-8"><a href="#cb10-8"></a><span class="co">#&gt; pickup_longitude: double</span></span>
-<span id="cb10-9"><a href="#cb10-9"></a><span class="co">#&gt; pickup_latitude: double</span></span>
-<span id="cb10-10"><a href="#cb10-10"></a><span class="co">#&gt; ...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28" data-code-line-numbers="1-10|3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a>arrow<span class="sc">::</span><span class="fu">schema</span>(nyc_taxi)</span>
+<span id="cb28-2"><a href=""></a><span class="co">#&gt; Schema</span></span>
+<span id="cb28-3"><a href=""></a><span class="co">#&gt; vendor_name: string</span></span>
+<span id="cb28-4"><a href=""></a><span class="co">#&gt; pickup_datetime: timestamp[ms]</span></span>
+<span id="cb28-5"><a href=""></a><span class="co">#&gt; dropoff_datetime: timestamp[ms]</span></span>
+<span id="cb28-6"><a href=""></a><span class="co">#&gt; passenger_count: int64</span></span>
+<span id="cb28-7"><a href=""></a><span class="co">#&gt; trip_distance: double</span></span>
+<span id="cb28-8"><a href=""></a><span class="co">#&gt; pickup_longitude: double</span></span>
+<span id="cb28-9"><a href=""></a><span class="co">#&gt; pickup_latitude: double</span></span>
+<span id="cb28-10"><a href=""></a><span class="co">#&gt; ...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="footer">
 <p>Arrow | Learn more about registering Arrow <a href="https://arrow.apache.org/docs/r/reference/register_scalar_function.html">User Defined Functions (“UDFs”)</a></p>
@@ -815,19 +1084,19 @@ Javier Orraca-Deatcu
 <li>Name your UDF “replace_arrow_nas” and remember to set <code>auto_convert = TRUE</code></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11" data-code-line-numbers="1-13|3-4|3-4,12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>arrow<span class="sc">::</span><span class="fu">register_scalar_function</span>(</span>
-<span id="cb11-2"><a href="#cb11-2"></a>  <span class="at">name =</span> <span class="st">"replace_arrow_nas"</span>,</span>
-<span id="cb11-3"><a href="#cb11-3"></a>  <span class="co"># Note: The first argument must always be context</span></span>
-<span id="cb11-4"><a href="#cb11-4"></a>  <span class="cf">function</span>(context, x, replacement) {</span>
-<span id="cb11-5"><a href="#cb11-5"></a>    stringr<span class="sc">::</span><span class="fu">str_replace_na</span>(x, replacement)</span>
-<span id="cb11-6"><a href="#cb11-6"></a>  },</span>
-<span id="cb11-7"><a href="#cb11-7"></a>  <span class="at">in_type =</span> <span class="fu">schema</span>(</span>
-<span id="cb11-8"><a href="#cb11-8"></a>    <span class="at">x =</span> <span class="fu">string</span>(),</span>
-<span id="cb11-9"><a href="#cb11-9"></a>    <span class="at">replacement =</span> <span class="fu">string</span>()</span>
-<span id="cb11-10"><a href="#cb11-10"></a>  ),</span>
-<span id="cb11-11"><a href="#cb11-11"></a>  <span class="at">out_type =</span> <span class="fu">string</span>(),</span>
-<span id="cb11-12"><a href="#cb11-12"></a>  <span class="at">auto_convert =</span> <span class="cn">TRUE</span></span>
-<span id="cb11-13"><a href="#cb11-13"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29" data-code-line-numbers="1-13|3-4|3-4,12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a>arrow<span class="sc">::</span><span class="fu">register_scalar_function</span>(</span>
+<span id="cb29-2"><a href=""></a>  <span class="at">name =</span> <span class="st">"replace_arrow_nas"</span>,</span>
+<span id="cb29-3"><a href=""></a>  <span class="co"># Note: The first argument must always be context</span></span>
+<span id="cb29-4"><a href=""></a>  <span class="cf">function</span>(context, x, replacement) {</span>
+<span id="cb29-5"><a href=""></a>    stringr<span class="sc">::</span><span class="fu">str_replace_na</span>(x, replacement)</span>
+<span id="cb29-6"><a href=""></a>  },</span>
+<span id="cb29-7"><a href=""></a>  <span class="at">in_type =</span> <span class="fu">schema</span>(</span>
+<span id="cb29-8"><a href=""></a>    <span class="at">x =</span> <span class="fu">string</span>(),</span>
+<span id="cb29-9"><a href=""></a>    <span class="at">replacement =</span> <span class="fu">string</span>()</span>
+<span id="cb29-10"><a href=""></a>  ),</span>
+<span id="cb29-11"><a href=""></a>  <span class="at">out_type =</span> <span class="fu">string</span>(),</span>
+<span id="cb29-12"><a href=""></a>  <span class="at">auto_convert =</span> <span class="cn">TRUE</span></span>
+<span id="cb29-13"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <aside class="notes">
 <p>Unless you’re developing a package, <code>auto_convert</code> should be set to <code>TRUE</code></p>
@@ -852,17 +1121,17 @@ Javier Orraca-Deatcu
 <li>Try your new registered function</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>nyc_taxi <span class="sc">|&gt;</span> </span>
-<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">mutate</span>(<span class="at">vendor_name =</span> <span class="fu">replace_arrow_nas</span>(vendor_name, <span class="st">"No vendor"</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb12-3"><a href="#cb12-3"></a>  <span class="fu">distinct</span>(vendor_name) <span class="sc">|&gt;</span> </span>
-<span id="cb12-4"><a href="#cb12-4"></a>  <span class="fu">arrange</span>(vendor_name) <span class="sc">|&gt;</span> </span>
-<span id="cb12-5"><a href="#cb12-5"></a>  <span class="fu">collect</span>()</span>
-<span id="cb12-6"><a href="#cb12-6"></a><span class="co">#&gt; # A tibble: 3 × 1</span></span>
-<span id="cb12-7"><a href="#cb12-7"></a><span class="co">#&gt;   vendor_name</span></span>
-<span id="cb12-8"><a href="#cb12-8"></a><span class="co">#&gt;   &lt;chr&gt;      </span></span>
-<span id="cb12-9"><a href="#cb12-9"></a><span class="co">#&gt; 1 CMT</span></span>
-<span id="cb12-10"><a href="#cb12-10"></a><span class="co">#&gt; 2 No vendor</span></span>
-<span id="cb12-11"><a href="#cb12-11"></a><span class="co">#&gt; 3 VTS</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href=""></a>nyc_taxi <span class="sc">|&gt;</span> </span>
+<span id="cb30-2"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">vendor_name =</span> <span class="fu">replace_arrow_nas</span>(vendor_name, <span class="st">"No vendor"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb30-3"><a href=""></a>  <span class="fu">distinct</span>(vendor_name) <span class="sc">|&gt;</span> </span>
+<span id="cb30-4"><a href=""></a>  <span class="fu">arrange</span>(vendor_name) <span class="sc">|&gt;</span> </span>
+<span id="cb30-5"><a href=""></a>  <span class="fu">collect</span>()</span>
+<span id="cb30-6"><a href=""></a><span class="co">#&gt; # A tibble: 3 × 1</span></span>
+<span id="cb30-7"><a href=""></a><span class="co">#&gt;   vendor_name</span></span>
+<span id="cb30-8"><a href=""></a><span class="co">#&gt;   &lt;chr&gt;      </span></span>
+<span id="cb30-9"><a href=""></a><span class="co">#&gt; 1 CMT</span></span>
+<span id="cb30-10"><a href=""></a><span class="co">#&gt; 2 No vendor</span></span>
+<span id="cb30-11"><a href=""></a><span class="co">#&gt; 3 VTS</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="footer">
 <p>Arrow | Learn more about registering Arrow <a href="https://arrow.apache.org/docs/r/reference/register_scalar_function.html">User Defined Functions (“UDFs”)</a></p>
@@ -871,7 +1140,7 @@ Javier Orraca-Deatcu
 <section class="slide level2">
 
 
-<img data-src="images/pokemon.gif" id="fig-539a35d47e664c97a50115a146a7f1bd-4" class="r-stretch quarto-figure-center"><div class="footer">
+<img data-src="images/pokemon.gif" class="r-stretch"><div class="footer">
 <p>Eevee can’t believe it… “Wooooooooooow, Javi!”</p>
 </div>
 </section>
@@ -882,21 +1151,19 @@ Javier Orraca-Deatcu
 <li>Competitor to JDBC &amp; ODBC allowing applications to code to this API standard but fetching results in an Arrow format</li>
 </ul>
 <div class="footer">
-<p>ADBC (Arrow Database Connectivity) | Learn more at <a href="https://arrow.apache.org/docs/format/ADBC.html">https://arrow.apache.org/docs/format/ADBC.html</a></p>
+<p>ADBC (Arrow Database Connectivity) | Learn more at <a href="https://arrow.apache.org/docs/format/ADBC.html" class="uri">https://arrow.apache.org/docs/format/ADBC.html</a></p>
 </div>
 </section>
 <section id="whats-next-for-arrow-1" class="slide level2">
 <h2>What’s next for Arrow? <img data-src="hexes/arrow.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <p><strong><em>ADBC: Arrow Database Connectivity</em></strong></p>
-<div id="fig-539a35d47e664c97a50115a146a7f1bd-5" class="quarto-figure quarto-figure-center" width="50%">
-<figure class="quarto-float quarto-float-fig">
-<div>
-<img data-src="images/ADBCQuadrants.svg" id="fig-539a35d47e664c97a50115a146a7f1bd-5" style="width:50.0%">
-</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/ADBCQuadrants.svg" class="quarto-figure quarto-figure-center" style="width:50.0%"></p>
 </figure>
 </div>
 <div class="footer">
-<p>ADBC (Arrow Database Connectivity) | Learn more at <a href="https://arrow.apache.org/docs/format/ADBC.html">https://arrow.apache.org/docs/format/ADBC.html</a></p>
+<p>ADBC (Arrow Database Connectivity) | Learn more at <a href="https://arrow.apache.org/docs/format/ADBC.html" class="uri">https://arrow.apache.org/docs/format/ADBC.html</a></p>
 </div>
 </section>
 <section id="whats-next-for-arrow-2" class="slide level2">
@@ -908,21 +1175,21 @@ Javier Orraca-Deatcu
 <li>The design goal for Flight is to create a new protocol for data services that uses the Arrow columnar format as both the over-the-wire data representation as well as the public API presented to developers</li>
 </ul>
 <div class="footer">
-<p>Arrow Flight SQL | Learn more at <a href="https://arrow.apache.org/docs/format/FlightSql.html">https://arrow.apache.org/docs/format/FlightSql.html</a></p>
+<p>Arrow Flight SQL | Learn more at <a href="https://arrow.apache.org/docs/format/FlightSql.html" class="uri">https://arrow.apache.org/docs/format/FlightSql.html</a></p>
 </div>
 </section></section>
 <section>
-<section id="duckdb-duckplyr" class="title-slide slide level1 center">
-<h1>3. DuckDB + duckplyr</h1>
+<section id="duckdb" class="title-slide slide level1 center">
+<h1>3. DuckDB</h1>
 <div class="footer">
-<p>duckplyr by DuckDB Labs | Learn more at <a href="https://duckdblabs.com/">https://duckdblabs.com/</a></p>
+<p>duckplyr by DuckDB Labs | Learn more at <a href="https://duckdblabs.com/" class="uri">https://duckdblabs.com/</a></p>
 </div>
 </section>
-<section id="duckdb" class="slide level2">
+<section id="duckdb-1" class="slide level2">
 <h2>DuckDB <img data-src="hexes/duckdb.png" class="absolute" style="top: -20px; right: 0px; height: 74.24px; "></h2>
 <ul>
 <li><a href="https://duckdblabs.com/">DuckDB Labs</a> created an in-line database management system, like a SQLite database engine, but optimized for distributed compute and optimized for larger-than-memory analysis</li>
-<li>The <code>duckdb</code> package for Python and offers a state-of-the-art optimizer that pushes down filters and projections directly into Arrow scans</li>
+<li>The <code>duckdb</code> package for Python offers a state-of-the-art optimizer that pushes down filters and projections directly into Arrow scans</li>
 <li>As a result, only relevant columns and partitions will be read thus significantly accelerates query execution</li>
 </ul>
 <div class="footer">
@@ -935,21 +1202,21 @@ Javier Orraca-Deatcu
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="co"># R Install</span></span>
-<span id="cb13-2"><a href="#cb13-2"></a><span class="fu">install.packages</span>(<span class="st">"duckdb"</span>)</span>
-<span id="cb13-3"><a href="#cb13-3"></a><span class="fu">install.packages</span>(<span class="st">"arrow"</span>)</span>
-<span id="cb13-4"><a href="#cb13-4"></a></span>
-<span id="cb13-5"><a href="#cb13-5"></a><span class="co"># For later use by Python and R:</span></span>
-<span id="cb13-6"><a href="#cb13-6"></a>arrow<span class="sc">::</span><span class="fu">copy_files</span>(</span>
-<span id="cb13-7"><a href="#cb13-7"></a>  <span class="at">from =</span> <span class="st">"s3://ursa-labs-taxi-data"</span>, </span>
-<span id="cb13-8"><a href="#cb13-8"></a>  <span class="at">to =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"nyc-taxi"</span>)</span>
-<span id="cb13-9"><a href="#cb13-9"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a><span class="co"># R Install</span></span>
+<span id="cb31-2"><a href=""></a><span class="fu">install.packages</span>(<span class="st">"duckdb"</span>)</span>
+<span id="cb31-3"><a href=""></a><span class="fu">install.packages</span>(<span class="st">"arrow"</span>)</span>
+<span id="cb31-4"><a href=""></a></span>
+<span id="cb31-5"><a href=""></a><span class="co"># For later use by Python and R:</span></span>
+<span id="cb31-6"><a href=""></a>arrow<span class="sc">::</span><span class="fu">copy_files</span>(</span>
+<span id="cb31-7"><a href=""></a>  <span class="at">from =</span> <span class="st">"s3://ursa-labs-taxi-data"</span>, </span>
+<span id="cb31-8"><a href=""></a>  <span class="at">to =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"nyc-taxi"</span>)</span>
+<span id="cb31-9"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># Python Install</span></span>
-<span id="cb14-2"><a href="#cb14-2"></a>pip install duckdb</span>
-<span id="cb14-3"><a href="#cb14-3"></a>pip install pyarrow</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href=""></a><span class="co"># Python Install</span></span>
+<span id="cb32-2"><a href=""></a>pip install duckdb</span>
+<span id="cb32-3"><a href=""></a>pip install pyarrow</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -960,45 +1227,45 @@ Javier Orraca-Deatcu
 <section id="duckdb-basics" class="slide level2">
 <h2>DuckDB Basics <img data-src="hexes/duckdb.png" class="absolute" style="top: -20px; right: 0px; height: 74.24px; "></h2>
 <div class="panel-tabset">
-<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">R</a></li><li><a href="#tabset-1-2">Python</a></li></ul>
+<ul id="tabset-8" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-8-1">R</a></li><li><a href="#tabset-8-2">Python</a></li></ul>
 <div class="tab-content">
-<div id="tabset-1-1">
+<div id="tabset-8-1">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">library</span>(duckdb)</span>
-<span id="cb15-2"><a href="#cb15-2"></a><span class="fu">library</span>(arrow)</span>
-<span id="cb15-3"><a href="#cb15-3"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb15-4"><a href="#cb15-4"></a></span>
-<span id="cb15-5"><a href="#cb15-5"></a>ds <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">open_dataset</span>(<span class="st">"nyc-taxi"</span>, <span class="at">partitioning =</span> <span class="fu">c</span>(<span class="st">"year"</span>, <span class="st">"month"</span>))</span>
-<span id="cb15-6"><a href="#cb15-6"></a></span>
-<span id="cb15-7"><a href="#cb15-7"></a>ds <span class="sc">|&gt;</span></span>
-<span id="cb15-8"><a href="#cb15-8"></a>  <span class="fu">filter</span>(year <span class="sc">&gt;</span> <span class="dv">2014</span> <span class="sc">&amp;</span> passenger_count <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> </span>
-<span id="cb15-9"><a href="#cb15-9"></a>           trip_distance <span class="sc">&gt;</span> <span class="fl">0.25</span> <span class="sc">&amp;</span> fare_amount <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
-<span id="cb15-10"><a href="#cb15-10"></a>  <span class="co"># Pass off to DuckDB</span></span>
-<span id="cb15-11"><a href="#cb15-11"></a>  <span class="fu">to_duckdb</span>() <span class="sc">|&gt;</span></span>
-<span id="cb15-12"><a href="#cb15-12"></a>  <span class="fu">group_by</span>(passenger_count) <span class="sc">|&gt;</span></span>
-<span id="cb15-13"><a href="#cb15-13"></a>  <span class="fu">mutate</span>(<span class="at">tip_pct =</span> tip_amount <span class="sc">/</span> fare_amount) <span class="sc">|&gt;</span></span>
-<span id="cb15-14"><a href="#cb15-14"></a>  <span class="fu">summarise</span>(<span class="at">fare_amount =</span> <span class="fu">mean</span>(fare_amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb15-15"><a href="#cb15-15"></a>            <span class="at">tip_amount =</span> <span class="fu">mean</span>(tip_amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb15-16"><a href="#cb15-16"></a>            <span class="at">tip_pct =</span> <span class="fu">mean</span>(tip_pct, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb15-17"><a href="#cb15-17"></a>  <span class="fu">arrange</span>(passenger_count) <span class="sc">|&gt;</span></span>
-<span id="cb15-18"><a href="#cb15-18"></a>  <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a><span class="fu">library</span>(duckdb)</span>
+<span id="cb33-2"><a href=""></a><span class="fu">library</span>(arrow)</span>
+<span id="cb33-3"><a href=""></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb33-4"><a href=""></a></span>
+<span id="cb33-5"><a href=""></a>ds <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">open_dataset</span>(<span class="st">"nyc-taxi"</span>, <span class="at">partitioning =</span> <span class="fu">c</span>(<span class="st">"year"</span>, <span class="st">"month"</span>))</span>
+<span id="cb33-6"><a href=""></a></span>
+<span id="cb33-7"><a href=""></a>ds <span class="sc">|&gt;</span></span>
+<span id="cb33-8"><a href=""></a>  <span class="fu">filter</span>(year <span class="sc">&gt;</span> <span class="dv">2014</span> <span class="sc">&amp;</span> passenger_count <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> </span>
+<span id="cb33-9"><a href=""></a>           trip_distance <span class="sc">&gt;</span> <span class="fl">0.25</span> <span class="sc">&amp;</span> fare_amount <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb33-10"><a href=""></a>  <span class="co"># Pass off to DuckDB</span></span>
+<span id="cb33-11"><a href=""></a>  <span class="fu">to_duckdb</span>() <span class="sc">|&gt;</span></span>
+<span id="cb33-12"><a href=""></a>  <span class="fu">group_by</span>(passenger_count) <span class="sc">|&gt;</span></span>
+<span id="cb33-13"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">tip_pct =</span> tip_amount <span class="sc">/</span> fare_amount) <span class="sc">|&gt;</span></span>
+<span id="cb33-14"><a href=""></a>  <span class="fu">summarise</span>(<span class="at">fare_amount =</span> <span class="fu">mean</span>(fare_amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb33-15"><a href=""></a>            <span class="at">tip_amount =</span> <span class="fu">mean</span>(tip_amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb33-16"><a href=""></a>            <span class="at">tip_pct =</span> <span class="fu">mean</span>(tip_pct, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb33-17"><a href=""></a>  <span class="fu">arrange</span>(passenger_count) <span class="sc">|&gt;</span></span>
+<span id="cb33-18"><a href=""></a>  <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div id="tabset-1-2">
+<div id="tabset-8-2">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a><span class="im">import</span> duckdb</span>
-<span id="cb16-2"><a href="#cb16-2"></a><span class="im">import</span> pyarrow <span class="im">as</span> pa</span>
-<span id="cb16-3"><a href="#cb16-3"></a><span class="im">import</span> pyarrow.dataset <span class="im">as</span> ds</span>
-<span id="cb16-4"><a href="#cb16-4"></a></span>
-<span id="cb16-5"><a href="#cb16-5"></a><span class="co"># Open dataset using year,month folder partition</span></span>
-<span id="cb16-6"><a href="#cb16-6"></a>nyc <span class="op">=</span> ds.dataset(<span class="st">'nyc-taxi/'</span>, partitioning<span class="op">=</span>[<span class="st">"year"</span>, <span class="st">"month"</span>])</span>
-<span id="cb16-7"><a href="#cb16-7"></a></span>
-<span id="cb16-8"><a href="#cb16-8"></a><span class="co"># We transform the nyc dataset into a DuckDB relation</span></span>
-<span id="cb16-9"><a href="#cb16-9"></a>nyc <span class="op">=</span> duckdb.arrow(nyc)</span>
-<span id="cb16-10"><a href="#cb16-10"></a></span>
-<span id="cb16-11"><a href="#cb16-11"></a><span class="co"># Run same query again</span></span>
-<span id="cb16-12"><a href="#cb16-12"></a>nyc.<span class="bu">filter</span>(<span class="st">"year &gt; 2014 &amp; passenger_count &gt; 0 &amp; trip_distance &gt; 0.25 &amp; fare_amount &gt; 0"</span>)</span>
-<span id="cb16-13"><a href="#cb16-13"></a>    .aggregate(<span class="st">"SELECT AVG(fare_amount), AVG(tip_amount), AVG(tip_amount / fare_amount) as tip_pct"</span>,<span class="st">"passenger_count"</span>).arrow()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href=""></a><span class="im">import</span> duckdb</span>
+<span id="cb34-2"><a href=""></a><span class="im">import</span> pyarrow <span class="im">as</span> pa</span>
+<span id="cb34-3"><a href=""></a><span class="im">import</span> pyarrow.dataset <span class="im">as</span> ds</span>
+<span id="cb34-4"><a href=""></a></span>
+<span id="cb34-5"><a href=""></a><span class="co"># Open dataset using year,month folder partition</span></span>
+<span id="cb34-6"><a href=""></a>nyc <span class="op">=</span> ds.dataset(<span class="st">'nyc-taxi/'</span>, partitioning<span class="op">=</span>[<span class="st">"year"</span>, <span class="st">"month"</span>])</span>
+<span id="cb34-7"><a href=""></a></span>
+<span id="cb34-8"><a href=""></a><span class="co"># We transform the nyc dataset into a DuckDB relation</span></span>
+<span id="cb34-9"><a href=""></a>nyc <span class="op">=</span> duckdb.arrow(nyc)</span>
+<span id="cb34-10"><a href=""></a></span>
+<span id="cb34-11"><a href=""></a><span class="co"># Run same query again</span></span>
+<span id="cb34-12"><a href=""></a>nyc.<span class="bu">filter</span>(<span class="st">"year &gt; 2014 &amp; passenger_count &gt; 0 &amp; trip_distance &gt; 0.25 &amp; fare_amount &gt; 0"</span>)</span>
+<span id="cb34-13"><a href=""></a>    .aggregate(<span class="st">"SELECT AVG(fare_amount), AVG(tip_amount), AVG(tip_amount / fare_amount) as tip_pct"</span>,<span class="st">"passenger_count"</span>).arrow()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -1010,45 +1277,45 @@ Javier Orraca-Deatcu
 <section id="duckdb-streaming" class="slide level2">
 <h2>DuckDB Streaming <img data-src="hexes/duckdb.png" class="absolute" style="top: -20px; right: 0px; height: 74.24px; "></h2>
 <div class="panel-tabset">
-<ul id="tabset-2" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-2-1">R</a></li><li><a href="#tabset-2-2">Python</a></li></ul>
+<ul id="tabset-9" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-9-1">R</a></li><li><a href="#tabset-9-2">Python</a></li></ul>
 <div class="tab-content">
-<div id="tabset-2-1">
+<div id="tabset-9-1">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># Reads dataset partitioning it in year/month folder</span></span>
-<span id="cb17-2"><a href="#cb17-2"></a>nyc_dataset <span class="ot">=</span> <span class="fu">open_dataset</span>(<span class="st">"nyc-taxi/"</span>, <span class="at">partitioning =</span> <span class="fu">c</span>(<span class="st">"year"</span>, <span class="st">"month"</span>))</span>
-<span id="cb17-3"><a href="#cb17-3"></a></span>
-<span id="cb17-4"><a href="#cb17-4"></a><span class="co"># Gets Database Connection</span></span>
-<span id="cb17-5"><a href="#cb17-5"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(duckdb<span class="sc">::</span><span class="fu">duckdb</span>())</span>
-<span id="cb17-6"><a href="#cb17-6"></a></span>
-<span id="cb17-7"><a href="#cb17-7"></a><span class="co"># We can use the same function as before to register our arrow dataset</span></span>
-<span id="cb17-8"><a href="#cb17-8"></a>duckdb<span class="sc">::</span><span class="fu">duckdb_register_arrow</span>(con, <span class="st">"nyc"</span>, nyc_dataset)</span>
-<span id="cb17-9"><a href="#cb17-9"></a></span>
-<span id="cb17-10"><a href="#cb17-10"></a>res <span class="ot">&lt;-</span> <span class="fu">dbSendQuery</span>(con, <span class="st">"SELECT * FROM nyc"</span>, <span class="at">arrow =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb17-11"><a href="#cb17-11"></a></span>
-<span id="cb17-12"><a href="#cb17-12"></a><span class="co"># DuckDB's queries can now produce a Record Batch Reader</span></span>
-<span id="cb17-13"><a href="#cb17-13"></a>record_batch_reader <span class="ot">&lt;-</span> duckdb<span class="sc">::</span><span class="fu">duckdb_fetch_record_batch</span>(res)</span>
-<span id="cb17-14"><a href="#cb17-14"></a></span>
-<span id="cb17-15"><a href="#cb17-15"></a><span class="co"># Which means we can stream the whole query per batch.</span></span>
-<span id="cb17-16"><a href="#cb17-16"></a><span class="co"># This retrieves the first batch</span></span>
-<span id="cb17-17"><a href="#cb17-17"></a>cur_batch <span class="ot">&lt;-</span> record_batch_reader<span class="sc">$</span><span class="fu">read_next_batch</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a><span class="co"># Reads dataset partitioning it in year/month folder</span></span>
+<span id="cb35-2"><a href=""></a>nyc_dataset <span class="ot">=</span> <span class="fu">open_dataset</span>(<span class="st">"nyc-taxi/"</span>, <span class="at">partitioning =</span> <span class="fu">c</span>(<span class="st">"year"</span>, <span class="st">"month"</span>))</span>
+<span id="cb35-3"><a href=""></a></span>
+<span id="cb35-4"><a href=""></a><span class="co"># Gets Database Connection</span></span>
+<span id="cb35-5"><a href=""></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(duckdb<span class="sc">::</span><span class="fu">duckdb</span>())</span>
+<span id="cb35-6"><a href=""></a></span>
+<span id="cb35-7"><a href=""></a><span class="co"># We can use the same function as before to register our arrow dataset</span></span>
+<span id="cb35-8"><a href=""></a>duckdb<span class="sc">::</span><span class="fu">duckdb_register_arrow</span>(con, <span class="st">"nyc"</span>, nyc_dataset)</span>
+<span id="cb35-9"><a href=""></a></span>
+<span id="cb35-10"><a href=""></a>res <span class="ot">&lt;-</span> <span class="fu">dbSendQuery</span>(con, <span class="st">"SELECT * FROM nyc"</span>, <span class="at">arrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb35-11"><a href=""></a></span>
+<span id="cb35-12"><a href=""></a><span class="co"># DuckDB's queries can now produce a Record Batch Reader</span></span>
+<span id="cb35-13"><a href=""></a>record_batch_reader <span class="ot">&lt;-</span> duckdb<span class="sc">::</span><span class="fu">duckdb_fetch_record_batch</span>(res)</span>
+<span id="cb35-14"><a href=""></a></span>
+<span id="cb35-15"><a href=""></a><span class="co"># Which means we can stream the whole query per batch.</span></span>
+<span id="cb35-16"><a href=""></a><span class="co"># This retrieves the first batch</span></span>
+<span id="cb35-17"><a href=""></a>cur_batch <span class="ot">&lt;-</span> record_batch_reader<span class="sc">$</span><span class="fu">read_next_batch</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div id="tabset-2-2">
+<div id="tabset-9-2">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># Reads dataset partitioning it in year/month folder</span></span>
-<span id="cb18-2"><a href="#cb18-2"></a>nyc_dataset <span class="op">=</span> ds.dataset(<span class="st">'nyc-taxi/'</span>, partitioning<span class="op">=</span>[<span class="st">"year"</span>, <span class="st">"month"</span>])</span>
-<span id="cb18-3"><a href="#cb18-3"></a></span>
-<span id="cb18-4"><a href="#cb18-4"></a><span class="co"># Gets Database Connection</span></span>
-<span id="cb18-5"><a href="#cb18-5"></a>con <span class="op">=</span> duckdb.<span class="ex">connect</span>()</span>
-<span id="cb18-6"><a href="#cb18-6"></a></span>
-<span id="cb18-7"><a href="#cb18-7"></a>query <span class="op">=</span> con.execute(<span class="st">"SELECT * FROM nyc_dataset"</span>)</span>
-<span id="cb18-8"><a href="#cb18-8"></a></span>
-<span id="cb18-9"><a href="#cb18-9"></a><span class="co"># DuckDB's queries can now produce a Record Batch Reader</span></span>
-<span id="cb18-10"><a href="#cb18-10"></a>record_batch_reader <span class="op">=</span> query.fetch_record_batch()</span>
-<span id="cb18-11"><a href="#cb18-11"></a></span>
-<span id="cb18-12"><a href="#cb18-12"></a><span class="co"># Which means we can stream the whole query per batch.</span></span>
-<span id="cb18-13"><a href="#cb18-13"></a><span class="co"># This retrieves the first batch</span></span>
-<span id="cb18-14"><a href="#cb18-14"></a>chunk <span class="op">=</span> record_batch_reader.read_next_batch()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href=""></a><span class="co"># Reads dataset partitioning it in year/month folder</span></span>
+<span id="cb36-2"><a href=""></a>nyc_dataset <span class="op">=</span> ds.dataset(<span class="st">'nyc-taxi/'</span>, partitioning<span class="op">=</span>[<span class="st">"year"</span>, <span class="st">"month"</span>])</span>
+<span id="cb36-3"><a href=""></a></span>
+<span id="cb36-4"><a href=""></a><span class="co"># Gets Database Connection</span></span>
+<span id="cb36-5"><a href=""></a>con <span class="op">=</span> duckdb.<span class="ex">connect</span>()</span>
+<span id="cb36-6"><a href=""></a></span>
+<span id="cb36-7"><a href=""></a>query <span class="op">=</span> con.execute(<span class="st">"SELECT * FROM nyc_dataset"</span>)</span>
+<span id="cb36-8"><a href=""></a></span>
+<span id="cb36-9"><a href=""></a><span class="co"># DuckDB's queries can now produce a Record Batch Reader</span></span>
+<span id="cb36-10"><a href=""></a>record_batch_reader <span class="op">=</span> query.fetch_record_batch()</span>
+<span id="cb36-11"><a href=""></a></span>
+<span id="cb36-12"><a href=""></a><span class="co"># Which means we can stream the whole query per batch.</span></span>
+<span id="cb36-13"><a href=""></a><span class="co"># This retrieves the first batch</span></span>
+<span id="cb36-14"><a href=""></a>chunk <span class="op">=</span> record_batch_reader.read_next_batch()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -1060,58 +1327,58 @@ Javier Orraca-Deatcu
 <section id="duckdb-streaming-speed" class="slide level2">
 <h2>DuckDB Streaming Speed <img data-src="hexes/duckdb.png" class="absolute" style="top: -20px; right: 0px; height: 74.24px; "></h2>
 <div class="panel-tabset">
-<ul id="tabset-3" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-3-1">DuckDB</a></li><li><a href="#tabset-3-2">Pandas</a></li></ul>
+<ul id="tabset-10" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-10-1">DuckDB</a></li><li><a href="#tabset-10-2">Pandas</a></li></ul>
 <div class="tab-content">
-<div id="tabset-3-1">
+<div id="tabset-10-1">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># DuckDB via Python</span></span>
-<span id="cb19-2"><a href="#cb19-2"></a><span class="co"># Open dataset using year,month folder partition</span></span>
-<span id="cb19-3"><a href="#cb19-3"></a>nyc <span class="ot">=</span> <span class="fu">ds.dataset</span>(<span class="st">'nyc-taxi/'</span>, <span class="at">partitioning=</span>[<span class="st">"year"</span>, <span class="st">"month"</span>])</span>
-<span id="cb19-4"><a href="#cb19-4"></a></span>
-<span id="cb19-5"><a href="#cb19-5"></a><span class="co"># Get database connection</span></span>
-<span id="cb19-6"><a href="#cb19-6"></a>con <span class="ot">=</span> <span class="fu">duckdb.connect</span>()</span>
-<span id="cb19-7"><a href="#cb19-7"></a></span>
-<span id="cb19-8"><a href="#cb19-8"></a><span class="co"># Run query that selects part of the data</span></span>
-<span id="cb19-9"><a href="#cb19-9"></a>query <span class="ot">=</span> <span class="fu">con.execute</span>(<span class="st">"SELECT total_amount, passenger_count,year FROM nyc where total_amount &gt; 100 and year &gt; 2014"</span>)</span>
-<span id="cb19-10"><a href="#cb19-10"></a></span>
-<span id="cb19-11"><a href="#cb19-11"></a><span class="co"># Create Record Batch Reader from Query Result.</span></span>
-<span id="cb19-12"><a href="#cb19-12"></a><span class="co"># "fetch_record_batch()" also accepts an extra parameter related to the desired produced chunk size.</span></span>
-<span id="cb19-13"><a href="#cb19-13"></a>record_batch_reader <span class="ot">=</span> <span class="fu">query.fetch_record_batch</span>()</span>
-<span id="cb19-14"><a href="#cb19-14"></a></span>
-<span id="cb19-15"><a href="#cb19-15"></a><span class="co"># Retrieve all batch chunks</span></span>
-<span id="cb19-16"><a href="#cb19-16"></a>chunk <span class="ot">=</span> <span class="fu">record_batch_reader.read_next_batch</span>()</span>
-<span id="cb19-17"><a href="#cb19-17"></a><span class="cf">while</span> <span class="fu">len</span>(chunk) <span class="sc">&gt;</span> <span class="dv">0</span><span class="sc">:</span></span>
-<span id="cb19-18"><a href="#cb19-18"></a>    chunk <span class="ot">=</span> <span class="fu">record_batch_reader.read_next_batch</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a><span class="co"># DuckDB via Python</span></span>
+<span id="cb37-2"><a href=""></a><span class="co"># Open dataset using year,month folder partition</span></span>
+<span id="cb37-3"><a href=""></a>nyc <span class="ot">=</span> <span class="fu">ds.dataset</span>(<span class="st">'nyc-taxi/'</span>, <span class="at">partitioning=</span>[<span class="st">"year"</span>, <span class="st">"month"</span>])</span>
+<span id="cb37-4"><a href=""></a></span>
+<span id="cb37-5"><a href=""></a><span class="co"># Get database connection</span></span>
+<span id="cb37-6"><a href=""></a>con <span class="ot">=</span> <span class="fu">duckdb.connect</span>()</span>
+<span id="cb37-7"><a href=""></a></span>
+<span id="cb37-8"><a href=""></a><span class="co"># Run query that selects part of the data</span></span>
+<span id="cb37-9"><a href=""></a>query <span class="ot">=</span> <span class="fu">con.execute</span>(<span class="st">"SELECT total_amount, passenger_count,year FROM nyc where total_amount &gt; 100 and year &gt; 2014"</span>)</span>
+<span id="cb37-10"><a href=""></a></span>
+<span id="cb37-11"><a href=""></a><span class="co"># Create Record Batch Reader from Query Result.</span></span>
+<span id="cb37-12"><a href=""></a><span class="co"># "fetch_record_batch()" also accepts an extra parameter related to the desired produced chunk size.</span></span>
+<span id="cb37-13"><a href=""></a>record_batch_reader <span class="ot">=</span> <span class="fu">query.fetch_record_batch</span>()</span>
+<span id="cb37-14"><a href=""></a></span>
+<span id="cb37-15"><a href=""></a><span class="co"># Retrieve all batch chunks</span></span>
+<span id="cb37-16"><a href=""></a>chunk <span class="ot">=</span> <span class="fu">record_batch_reader.read_next_batch</span>()</span>
+<span id="cb37-17"><a href=""></a><span class="cf">while</span> <span class="fu">len</span>(chunk) <span class="sc">&gt;</span> <span class="dv">0</span><span class="sc">:</span></span>
+<span id="cb37-18"><a href=""></a>    chunk <span class="ot">=</span> <span class="fu">record_batch_reader.read_next_batch</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div id="tabset-3-2">
+<div id="tabset-10-2">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a><span class="co"># We must exclude one of the columns of the NYC dataset due to an unimplemented cast in Arrow</span></span>
-<span id="cb20-2"><a href="#cb20-2"></a>working_columns <span class="op">=</span> [<span class="st">"vendor_id"</span>,<span class="st">"pickup_at"</span>,<span class="st">"dropoff_at"</span>,<span class="st">"passenger_count"</span>,<span class="st">"trip_distance"</span>,<span class="st">"pickup_longitude"</span>,</span>
-<span id="cb20-3"><a href="#cb20-3"></a>    <span class="st">"pickup_latitude"</span>,<span class="st">"store_and_fwd_flag"</span>,<span class="st">"dropoff_longitude"</span>,<span class="st">"dropoff_latitude"</span>,<span class="st">"payment_type"</span>,</span>
-<span id="cb20-4"><a href="#cb20-4"></a>    <span class="st">"fare_amount"</span>,<span class="st">"extra"</span>,<span class="st">"mta_tax"</span>,<span class="st">"tip_amount"</span>,<span class="st">"tolls_amount"</span>,<span class="st">"total_amount"</span>,<span class="st">"year"</span>, <span class="st">"month"</span>]</span>
-<span id="cb20-5"><a href="#cb20-5"></a></span>
-<span id="cb20-6"><a href="#cb20-6"></a><span class="co"># Open dataset using year,month folder partition</span></span>
-<span id="cb20-7"><a href="#cb20-7"></a>nyc_dataset <span class="op">=</span> ds.dataset(<span class="bu">dir</span>, partitioning<span class="op">=</span>[<span class="st">"year"</span>, <span class="st">"month"</span>])</span>
-<span id="cb20-8"><a href="#cb20-8"></a><span class="co"># Generate a scanner to skip problematic column</span></span>
-<span id="cb20-9"><a href="#cb20-9"></a>dataset_scanner <span class="op">=</span> nyc_dataset.scanner(columns<span class="op">=</span>working_columns)</span>
-<span id="cb20-10"><a href="#cb20-10"></a></span>
-<span id="cb20-11"><a href="#cb20-11"></a><span class="co"># Materialize dataset to an Arrow Table</span></span>
-<span id="cb20-12"><a href="#cb20-12"></a>nyc_table <span class="op">=</span> dataset_scanner.to_table()</span>
-<span id="cb20-13"><a href="#cb20-13"></a></span>
-<span id="cb20-14"><a href="#cb20-14"></a><span class="co"># Generate Dataframe from Arow Table</span></span>
-<span id="cb20-15"><a href="#cb20-15"></a>nyc_df <span class="op">=</span> nyc_table.to_pandas()</span>
-<span id="cb20-16"><a href="#cb20-16"></a></span>
-<span id="cb20-17"><a href="#cb20-17"></a><span class="co"># Apply Filter</span></span>
-<span id="cb20-18"><a href="#cb20-18"></a>filtered_df <span class="op">=</span> nyc_df[</span>
-<span id="cb20-19"><a href="#cb20-19"></a>    (nyc_df.total_amount <span class="op">&gt;</span> <span class="dv">100</span>) <span class="op">&amp;</span></span>
-<span id="cb20-20"><a href="#cb20-20"></a>    (nyc_df.year <span class="op">&gt;</span><span class="dv">2014</span>)]</span>
-<span id="cb20-21"><a href="#cb20-21"></a></span>
-<span id="cb20-22"><a href="#cb20-22"></a><span class="co"># Apply Projection</span></span>
-<span id="cb20-23"><a href="#cb20-23"></a>res <span class="op">=</span> filtered_df[[<span class="st">"total_amount"</span>, <span class="st">"passenger_count"</span>,<span class="st">"year"</span>]]</span>
-<span id="cb20-24"><a href="#cb20-24"></a></span>
-<span id="cb20-25"><a href="#cb20-25"></a><span class="co"># Transform Result back to an Arrow Table</span></span>
-<span id="cb20-26"><a href="#cb20-26"></a>new_table <span class="op">=</span> pa.Table.from_pandas(res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href=""></a><span class="co"># We must exclude one of the columns of the NYC dataset due to an unimplemented cast in Arrow</span></span>
+<span id="cb38-2"><a href=""></a>working_columns <span class="op">=</span> [<span class="st">"vendor_id"</span>,<span class="st">"pickup_at"</span>,<span class="st">"dropoff_at"</span>,<span class="st">"passenger_count"</span>,<span class="st">"trip_distance"</span>,<span class="st">"pickup_longitude"</span>,</span>
+<span id="cb38-3"><a href=""></a>    <span class="st">"pickup_latitude"</span>,<span class="st">"store_and_fwd_flag"</span>,<span class="st">"dropoff_longitude"</span>,<span class="st">"dropoff_latitude"</span>,<span class="st">"payment_type"</span>,</span>
+<span id="cb38-4"><a href=""></a>    <span class="st">"fare_amount"</span>,<span class="st">"extra"</span>,<span class="st">"mta_tax"</span>,<span class="st">"tip_amount"</span>,<span class="st">"tolls_amount"</span>,<span class="st">"total_amount"</span>,<span class="st">"year"</span>, <span class="st">"month"</span>]</span>
+<span id="cb38-5"><a href=""></a></span>
+<span id="cb38-6"><a href=""></a><span class="co"># Open dataset using year,month folder partition</span></span>
+<span id="cb38-7"><a href=""></a>nyc_dataset <span class="op">=</span> ds.dataset(<span class="bu">dir</span>, partitioning<span class="op">=</span>[<span class="st">"year"</span>, <span class="st">"month"</span>])</span>
+<span id="cb38-8"><a href=""></a><span class="co"># Generate a scanner to skip problematic column</span></span>
+<span id="cb38-9"><a href=""></a>dataset_scanner <span class="op">=</span> nyc_dataset.scanner(columns<span class="op">=</span>working_columns)</span>
+<span id="cb38-10"><a href=""></a></span>
+<span id="cb38-11"><a href=""></a><span class="co"># Materialize dataset to an Arrow Table</span></span>
+<span id="cb38-12"><a href=""></a>nyc_table <span class="op">=</span> dataset_scanner.to_table()</span>
+<span id="cb38-13"><a href=""></a></span>
+<span id="cb38-14"><a href=""></a><span class="co"># Generate Dataframe from Arow Table</span></span>
+<span id="cb38-15"><a href=""></a>nyc_df <span class="op">=</span> nyc_table.to_pandas()</span>
+<span id="cb38-16"><a href=""></a></span>
+<span id="cb38-17"><a href=""></a><span class="co"># Apply Filter</span></span>
+<span id="cb38-18"><a href=""></a>filtered_df <span class="op">=</span> nyc_df[</span>
+<span id="cb38-19"><a href=""></a>    (nyc_df.total_amount <span class="op">&gt;</span> <span class="dv">100</span>) <span class="op">&amp;</span></span>
+<span id="cb38-20"><a href=""></a>    (nyc_df.year <span class="op">&gt;</span><span class="dv">2014</span>)]</span>
+<span id="cb38-21"><a href=""></a></span>
+<span id="cb38-22"><a href=""></a><span class="co"># Apply Projection</span></span>
+<span id="cb38-23"><a href=""></a>res <span class="op">=</span> filtered_df[[<span class="st">"total_amount"</span>, <span class="st">"passenger_count"</span>,<span class="st">"year"</span>]]</span>
+<span id="cb38-24"><a href=""></a></span>
+<span id="cb38-25"><a href=""></a><span class="co"># Transform Result back to an Arrow Table</span></span>
+<span id="cb38-26"><a href=""></a>new_table <span class="op">=</span> pa.Table.from_pandas(res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -1131,11 +1398,9 @@ Javier Orraca-Deatcu
 </ul>
 </div>
 <div class="fragment">
-<div id="fig-539a35d47e664c97a50115a146a7f1bd-6" class="quarto-figure quarto-figure-center" width="60%">
-<figure class="quarto-float quarto-float-fig">
-<div>
-<img data-src="images/minion.gif" id="fig-539a35d47e664c97a50115a146a7f1bd-6" style="width:60.0%">
-</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/minion.gif" class="quarto-figure quarto-figure-center" style="width:60.0%"></p>
 </figure>
 </div>
 <div class="footer">
@@ -1153,7 +1418,7 @@ Javier Orraca-Deatcu
 </ul></li>
 </ul>
 <div class="footer">
-<p>duckplyr | Learn more at <a href="https://duckdblabs.com/">https://duckdblabs.com/</a></p>
+<p>duckplyr | Learn more at <a href="https://duckdblabs.com/" class="uri">https://duckdblabs.com/</a></p>
 </div>
 </section>
 <section id="benchmarking-analysis" class="slide level2">
@@ -1170,429 +1435,94 @@ Javier Orraca-Deatcu
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21" data-code-line-numbers="1-7|7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>nyc_taxi <span class="sc">|&gt;</span> </span>
-<span id="cb21-2"><a href="#cb21-2"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(passenger_count <span class="sc">&gt;</span> <span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb21-3"><a href="#cb21-3"></a>    dplyr<span class="sc">::</span><span class="fu">group_by</span>(year) <span class="sc">|&gt;</span> </span>
-<span id="cb21-4"><a href="#cb21-4"></a>    dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="at">all_trips =</span> <span class="fu">n</span>(),</span>
-<span id="cb21-5"><a href="#cb21-5"></a>                     <span class="at">shared_trips =</span> <span class="fu">sum</span>(passenger_count, <span class="at">na.rm =</span> T)) <span class="sc">|&gt;</span></span>
-<span id="cb21-6"><a href="#cb21-6"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">pct_shared =</span> shared_trips <span class="sc">/</span> all_trips <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb21-7"><a href="#cb21-7"></a>    dplyr<span class="sc">::</span><span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39" data-code-line-numbers="1-7|7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href=""></a>nyc_taxi <span class="sc">|&gt;</span> </span>
+<span id="cb39-2"><a href=""></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(passenger_count <span class="sc">&gt;</span> <span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb39-3"><a href=""></a>    dplyr<span class="sc">::</span><span class="fu">group_by</span>(year) <span class="sc">|&gt;</span> </span>
+<span id="cb39-4"><a href=""></a>    dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="at">all_trips =</span> <span class="fu">n</span>(),</span>
+<span id="cb39-5"><a href=""></a>                     <span class="at">shared_trips =</span> <span class="fu">sum</span>(passenger_count, <span class="at">na.rm =</span> T)) <span class="sc">|&gt;</span></span>
+<span id="cb39-6"><a href=""></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">pct_shared =</span> shared_trips <span class="sc">/</span> all_trips <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb39-7"><a href=""></a>    dplyr<span class="sc">::</span><span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="footer">
-<p>DuckDB Labs | Learn more at <a href="https://duckdblabs.com/">https://duckdblabs.com/</a></p>
+<p>DuckDB Labs | Learn more at <a href="https://duckdblabs.com/" class="uri">https://duckdblabs.com/</a></p>
 </div>
 </section>
 <section id="benchmark-1-million-rows" class="slide level2">
 <h2>Benchmark: 1 million rows <img data-src="hexes/duckdb.png" class="absolute" style="top: -20px; right: 0px; height: 74.24px; "></h2>
-<div id="fig-539a35d47e664c97a50115a146a7f1bd-7" class="quarto-figure quarto-figure-center">
-<figure class="quarto-float quarto-float-fig">
-<div>
-<img data-src="images/benchmark_1000000.png" id="fig-539a35d47e664c97a50115a146a7f1bd-7">
-</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/benchmark_1000000.png" class="quarto-figure quarto-figure-center"></p>
 </figure>
 </div>
 <div class="footer">
-<p>DuckDB Labs | Learn more at <a href="https://duckdblabs.com/">https://duckdblabs.com/</a></p>
+<p>DuckDB Labs | Learn more at <a href="https://duckdblabs.com/" class="uri">https://duckdblabs.com/</a></p>
 </div>
 </section>
 <section id="benchmark-10-million-rows" class="slide level2">
 <h2>Benchmark: 10 million rows <img data-src="hexes/duckdb.png" class="absolute" style="top: -20px; right: 0px; height: 74.24px; "></h2>
-<div id="fig-539a35d47e664c97a50115a146a7f1bd-8" class="quarto-figure quarto-figure-center">
-<figure class="quarto-float quarto-float-fig">
-<div>
-<img data-src="images/benchmark_10000000.png" id="fig-539a35d47e664c97a50115a146a7f1bd-8">
-</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/benchmark_10000000.png" class="quarto-figure quarto-figure-center"></p>
 </figure>
 </div>
 <div class="footer">
-<p>DuckDB Labs | Learn more at <a href="https://duckdblabs.com/">https://duckdblabs.com/</a></p>
+<p>DuckDB Labs | Learn more at <a href="https://duckdblabs.com/" class="uri">https://duckdblabs.com/</a></p>
 </div>
 </section>
 <section id="benchmark-100-million-rows" class="slide level2">
 <h2>Benchmark: 100 million rows <img data-src="hexes/duckdb.png" class="absolute" style="top: -20px; right: 0px; height: 74.24px; "></h2>
-<div id="fig-539a35d47e664c97a50115a146a7f1bd-9" class="quarto-figure quarto-figure-center">
-<figure class="quarto-float quarto-float-fig">
-<div>
-<img data-src="images/benchmark_100000000.png" id="fig-539a35d47e664c97a50115a146a7f1bd-9">
-</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/benchmark_100000000.png" class="quarto-figure quarto-figure-center"></p>
 </figure>
 </div>
 <div class="footer">
-<p>DuckDB Labs | Learn more at <a href="https://duckdblabs.com/">https://duckdblabs.com/</a></p>
+<p>DuckDB Labs | Learn more at <a href="https://duckdblabs.com/" class="uri">https://duckdblabs.com/</a></p>
 </div>
 </section>
 <section id="benchmark-500-million-rows" class="slide level2">
 <h2>Benchmark: 500 million rows <img data-src="hexes/duckdb.png" class="absolute" style="top: -20px; right: 0px; height: 74.24px; "></h2>
-<div id="fig-539a35d47e664c97a50115a146a7f1bd-10" class="quarto-figure quarto-figure-center">
-<figure class="quarto-float quarto-float-fig">
-<div>
-<img data-src="images/benchmark_500000000.png" id="fig-539a35d47e664c97a50115a146a7f1bd-10">
-</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/benchmark_500000000.png" class="quarto-figure quarto-figure-center"></p>
 </figure>
 </div>
 <div class="footer">
-<p>DuckDB Labs | Learn more at <a href="https://duckdblabs.com/">https://duckdblabs.com/</a></p>
-</div>
-</section></section>
-<section>
-<section id="tidymodels" class="title-slide slide level1 center">
-<h1>4. tidymodels</h1>
-<div class="footer">
-<p>tidymodels | Learn more at <a href="https://www.tidymodels.org/">https://www.tidymodels.org/</a></p>
+<p>DuckDB Labs | Learn more at <a href="https://duckdblabs.com/" class="uri">https://duckdblabs.com/</a></p>
 </div>
 </section>
-<section id="section" class="slide level2" data-background-image="images/tm-org.png" data-background-size="contain">
-<h2></h2>
-<div class="footer">
-<p>tidymodels | Learn more at <a href="https://www.tidymodels.org/">https://www.tidymodels.org/</a></p>
-</div>
-</section>
-<section id="tidymodels-packages" class="slide level2">
-<h2>tidymodels packages <img data-src="hexes/tidymodels.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "> <img data-src="hexes/rsample.png" class="absolute" style="top: -20px; right: 64px; width: 64px; height: 74.24px; "> <img data-src="hexes/parsnip.png" class="absolute" style="top: -20px; right: 128px; width: 64px; height: 74.24px; "></h2>
-<div id="fig-539a35d47e664c97a50115a146a7f1bd-11" class="quarto-figure quarto-figure-center" width="75%">
-<figure class="quarto-float quarto-float-fig">
-<div>
-<img data-src="images/tidymodels_1.png" id="fig-539a35d47e664c97a50115a146a7f1bd-11" style="width:75.0%">
-</div>
-</figure>
-</div>
-<div class="footer">
-<p>tidymodels | Learn more at <a href="https://www.tidymodels.org/">https://www.tidymodels.org/</a></p>
-</div>
-</section>
-<section id="tidymodels-packages-1" class="slide level2">
-<h2>tidymodels packages <img data-src="hexes/workflows.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "> <img data-src="hexes/tune.png" class="absolute" style="top: -20px; right: 64px; width: 64px; height: 74.24px; "> <img data-src="hexes/recipes.png" class="absolute" style="top: -20px; right: 128px; width: 64px; height: 74.24px; "></h2>
-<div id="fig-539a35d47e664c97a50115a146a7f1bd-12" class="quarto-figure quarto-figure-center" width="75%">
-<figure class="quarto-float quarto-float-fig">
-<div>
-<img data-src="images/tidymodels_2.png" id="fig-539a35d47e664c97a50115a146a7f1bd-12" style="width:75.0%">
-</div>
-</figure>
-</div>
-<div class="footer">
-<p>tidymodels | Learn more at <a href="https://www.tidymodels.org/">https://www.tidymodels.org/</a></p>
-</div>
-</section>
-<section id="tidymodels-packages-2" class="slide level2">
-<h2>tidymodels packages <img data-src="hexes/yardstick.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "> <img data-src="hexes/dials.png" class="absolute" style="top: -20px; right: 64px; width: 64px; height: 74.24px; "> <img data-src="hexes/broom.png" class="absolute" style="top: -20px; right: 128px; width: 64px; height: 74.24px; "></h2>
-<div id="fig-539a35d47e664c97a50115a146a7f1bd-13" class="quarto-figure quarto-figure-center" width="75%">
-<figure class="quarto-float quarto-float-fig">
-<div>
-<img data-src="images/tidymodels_3.png" id="fig-539a35d47e664c97a50115a146a7f1bd-13" style="width:75.0%">
-</div>
-</figure>
-</div>
-<div class="footer">
-<p>tidymodels | Learn more at <a href="https://www.tidymodels.org/">https://www.tidymodels.org/</a></p>
-</div>
-</section>
-<section id="usemodels" class="slide level2">
-<h2>usemodels <img data-src="hexes/tidymodels.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
-<ul>
-<li>The <code>usemodels</code> package generates easy-to-use boilerplate code for modeling</li>
-<li><code>usemodels::use_glmnet()</code> generates code that eases the setup of using the <a href="https://glmnet.stanford.edu/index.html">glmnet</a> algorithm, <em>and others</em>, within the <code>tidymodels</code> framework</li>
-</ul>
-<h3 id="usemodels-input-example">usemodels input example</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb22" data-code-line-numbers="1-4|4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">library</span>(usemodels)</span>
-<span id="cb22-2"><a href="#cb22-2"></a><span class="fu">library</span>(palmerpenguins)</span>
-<span id="cb22-3"><a href="#cb22-3"></a><span class="fu">data</span>(penguins)</span>
-<span id="cb22-4"><a href="#cb22-4"></a><span class="fu">use_glmnet</span>(body_mass_g <span class="sc">~</span> ., <span class="at">data =</span> penguins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="footer">
-<p>usemodels | Learn more at <a href="https://usemodels.tidymodels.org/">https://usemodels.tidymodels.org/</a></p>
-</div>
-</section>
-<section id="usemodels-output" class="slide level2">
-<h2>usemodels output <img data-src="hexes/tidymodels.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>glmnet_recipe <span class="ot">&lt;-</span> <span class="fu">recipe</span>(<span class="at">formula =</span> body_mass_g <span class="sc">~</span> ., <span class="at">data =</span> penguins) <span class="sc">|&gt;</span></span>
-<span id="cb23-2"><a href="#cb23-2"></a>  <span class="fu">step_zv</span>(<span class="fu">all_predictors</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb23-3"><a href="#cb23-3"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_numeric_predictors</span>()) </span>
-<span id="cb23-4"><a href="#cb23-4"></a></span>
-<span id="cb23-5"><a href="#cb23-5"></a>glmnet_spec <span class="ot">&lt;-</span> <span class="fu">multinom_reg</span>(<span class="at">penalty =</span> <span class="fu">tune</span>(), <span class="at">mixture =</span> <span class="fu">tune</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb23-6"><a href="#cb23-6"></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb23-7"><a href="#cb23-7"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>) </span>
-<span id="cb23-8"><a href="#cb23-8"></a></span>
-<span id="cb23-9"><a href="#cb23-9"></a>glmnet_workflow <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
-<span id="cb23-10"><a href="#cb23-10"></a>  <span class="fu">add_recipe</span>(glmnet_recipe) <span class="sc">|&gt;</span></span>
-<span id="cb23-11"><a href="#cb23-11"></a>  <span class="fu">add_model</span>(glmnet_spec) </span>
-<span id="cb23-12"><a href="#cb23-12"></a></span>
-<span id="cb23-13"><a href="#cb23-13"></a>glmnet_grid <span class="ot">&lt;-</span> tidyr<span class="sc">::</span><span class="fu">crossing</span>(<span class="at">penalty =</span> <span class="dv">10</span><span class="sc">^</span><span class="fu">seq</span>(<span class="sc">-</span><span class="dv">6</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="at">length.out =</span> <span class="dv">20</span>), </span>
-<span id="cb23-14"><a href="#cb23-14"></a>                               <span class="at">mixture =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>, <span class="fl">0.8</span>, <span class="dv">1</span>)) </span>
-<span id="cb23-15"><a href="#cb23-15"></a></span>
-<span id="cb23-16"><a href="#cb23-16"></a>glmnet_tune <span class="ot">&lt;-</span> </span>
-<span id="cb23-17"><a href="#cb23-17"></a>  <span class="fu">tune_grid</span>(glmnet_workflow,</span>
-<span id="cb23-18"><a href="#cb23-18"></a>            <span class="at">resamples =</span> <span class="fu">stop</span>(<span class="st">"add your rsample object"</span>), </span>
-<span id="cb23-19"><a href="#cb23-19"></a>            <span class="at">grid =</span> glmnet_grid) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="footer">
-<p>usemodels | Learn more at <a href="https://usemodels.tidymodels.org/">https://usemodels.tidymodels.org/</a></p>
-</div>
-</section>
-<section id="usemodels-templates" class="slide level2">
-<h2>usemodels templates <img data-src="hexes/tidymodels.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
-<ul>
-<li><code>usemodels</code> isn’t new but still in early development</li>
-<li>the following model templates can be called using one of the <code>usemodels::use_*()</code> variants below:</li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="sc">&gt;</span> <span class="fu">ls</span>(<span class="st">"package:usemodels"</span>, <span class="at">pattern =</span> <span class="st">"use_"</span>)</span>
-<span id="cb24-2"><a href="#cb24-2"></a>[<span class="dv">1</span>] <span class="st">"use_C5.0"</span>             <span class="st">"use_cubist"</span>           <span class="st">"use_earth"</span>           </span>
-<span id="cb24-3"><a href="#cb24-3"></a>[<span class="dv">4</span>] <span class="st">"use_glmnet"</span>           <span class="st">"use_kernlab_svm_poly"</span> <span class="st">"use_kernlab_svm_rbf"</span> </span>
-<span id="cb24-4"><a href="#cb24-4"></a>[<span class="dv">7</span>] <span class="st">"use_kknn"</span>             <span class="st">"use_ranger"</span>           <span class="st">"use_xgboost"</span>         </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="footer">
-<p>usemodels | Learn more at <a href="https://usemodels.tidymodels.org/">https://usemodels.tidymodels.org/</a></p>
-</div>
-</section>
-<section id="hyperparameter-tuning" class="slide level2">
-<h2>Hyperparameter Tuning <img data-src="hexes/tune.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "> <img data-src="hexes/dials.png" class="absolute" style="top: -20px; right: 64px; width: 64px; height: 74.24px; "></h2>
-<p>The main two strategies for optimization are:</p>
-<div class="fragment">
-<ul>
-<li><p><strong>Grid search</strong> 💠 which tests a pre-defined set of candidate values</p></li>
-<li><p><strong>Iterative search</strong> 🌀 which suggests/estimates new values of candidate parameters to evaluate</p></li>
-</ul>
-<div class="footer">
-<p>Slide credit | <a href="https://workshops.tidymodels.org/#advanced-tidymodels">Posit, Advanced Tidymodels Workshop</a></p>
-</div>
-</div>
-</section>
-<section id="grid-search" class="slide level2">
-<h2>Grid Search <img data-src="hexes/tune.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
-<ul>
-<li>In this example, we see a large grid showing all points with our goal being to minimize MAE via learning rate:</li>
-</ul>
-<div id="fig-539a35d47e664c97a50115a146a7f1bd-14" class="quarto-figure quarto-figure-center" width="55%">
-<figure class="quarto-float quarto-float-fig">
-<div>
-<img data-src="images/grid-large-1.png" id="fig-539a35d47e664c97a50115a146a7f1bd-14" style="width:55.0%">
-</div>
-</figure>
-</div>
-<div class="footer">
-<p>Slide &amp; illustration credit | <a href="https://workshops.tidymodels.org/#advanced-tidymodels">Posit, Advanced Tidymodels Workshop</a></p>
-</div>
-</section>
-<section id="grid-search-1" class="slide level2">
-<h2>Grid Search <img data-src="hexes/tune.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
-<ul>
-<li>In reality we would probably sample the space more densely with, for example, a three point grid:</li>
-</ul>
-<div id="fig-539a35d47e664c97a50115a146a7f1bd-15" class="quarto-figure quarto-figure-center" width="55%">
-<figure class="quarto-float quarto-float-fig">
-<div>
-<img data-src="images/grid-large-sampled-1.png" id="fig-539a35d47e664c97a50115a146a7f1bd-15" style="width:55.0%">
-</div>
-</figure>
-</div>
-<div class="footer">
-<p>Slide &amp; illustration credit | <a href="https://workshops.tidymodels.org/#advanced-tidymodels">Posit, Advanced Tidymodels Workshop</a></p>
-</div>
-</section>
-<section id="iterative-search" class="slide level2">
-<h2>Iterative Search <img data-src="hexes/tune.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
-<ul>
-<li>We could start with a few points and search the space using an iterative approach via the <code>tune</code> package:</li>
-</ul>
-<div id="fig-539a35d47e664c97a50115a146a7f1bd-16" class="quarto-figure quarto-figure-center">
-<figure class="quarto-float quarto-float-fig">
-<div>
-<img data-src="images/tidymodels_animated_gp_fast_600.gif" id="fig-539a35d47e664c97a50115a146a7f1bd-16">
-</div>
-</figure>
-</div>
-<div class="footer">
-<p>Slide &amp; illustration credit | <a href="https://workshops.tidymodels.org/#advanced-tidymodels">Posit, Advanced Tidymodels Workshop</a></p>
-</div>
-</section>
-<section id="gaussian-process-optimization" class="slide level2">
-<h2>Gaussian Process &amp; Optimization</h2>
-<p>We can make a “meta-model” with a small set of historical performance results</p>
-<p><em>Gaussian Processes (GP)</em> models are a good choice to model performance</p>
-<ul>
-<li><p>It is a Bayesian model so we are using <em>Bayesian Optimization (BO)</em></p></li>
-<li><p>The GP model can take candidate tuning parameter combinations as inputs and make predictions for performance (e.g.&nbsp;MAE)</p></li>
-</ul>
-<div class="footer">
-<p>Slide credit | <a href="https://workshops.tidymodels.org/#advanced-tidymodels">Posit, Advanced Tidymodels Workshop</a></p>
-</div>
-</section>
-<section id="acquisition-functions" class="slide level2">
-<h2>Acquisition Functions</h2>
-<p>We’ll use an acquisition function to select a new candidate</p>
-<p>The most popular method appears to be <em>Expected Improvement (EI)</em> above the current best results</p>
-<ul>
-<li>Zero at existing data points.</li>
-<li>The expected improvement is integrated over all possible improvement (“expected” in the probability sense).</li>
-</ul>
-<p>We would probably pick the point with the largest EI as the next point to iterate</p>
-<div class="footer">
-<p>Slide credit | <a href="https://workshops.tidymodels.org/#advanced-tidymodels">Posit, Advanced Tidymodels Workshop</a></p>
-</div>
-</section>
-<section id="iteration-approach" class="slide level2">
-<h2>Iteration Approach</h2>
-<p>Once we pick the candidate point, we measure performance for it (e.g.&nbsp;resampling)</p>
-<p>Another GP is fit, EI is recomputed, and so on</p>
-<p>We stop when we have completed the allowed number of iterations or if we don’t see any improvement after a pre-set number of attempts</p>
-<div class="footer">
-<p>Slide credit | <a href="https://workshops.tidymodels.org/#advanced-tidymodels">Posit, Advanced Tidymodels Workshop</a></p>
-</div>
-</section>
-<section id="iteration-ei-visualized" class="slide level2">
-<h2>Iteration &amp; EI Visualized</h2>
+<section class="slide level2">
 
-<img data-src="images/anime_improvement.gif" id="fig-539a35d47e664c97a50115a146a7f1bd-17" class="r-stretch quarto-figure-center"><div class="footer">
-<p>Slide &amp; illustration credit | <a href="https://workshops.tidymodels.org/#advanced-tidymodels">Posit, Advanced Tidymodels Workshop</a></p>
+<div class="r-fit-text">
+<p>questions?</p>
 </div>
 </section>
-<section id="bayesian-optimization" class="slide level2">
-<h2>Bayesian Optimization <img data-src="hexes/tune.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
-<ul>
-<li><p>We’ll use a function called <code>tune_bayes()</code> that has very similar syntax to <code>tune_grid()</code></p></li>
-<li><p>It has an additional <code>initial</code> argument for the initial set of performance estimates and parameter combinations for the GP model</p></li>
-<li><p><code>initial</code> can be the results of another <code>tune_*()</code> function or an integer (in which case <code>tune_grid()</code> is used under to hood)</p></li>
-<li><p>Max Kuhn suggests at least the # of tuning parameters plus two as the <code>initial</code> grid</p></li>
-</ul>
-<div class="footer">
-<p>tune | Learn more about <a href="https://tune.tidymodels.org/index.html">tune, a tidymodels package</a></p>
-</div>
-</section>
-<section id="initial-grid-with-tune_grid" class="slide level2">
-<h2>Initial Grid with tune_grid() <img data-src="hexes/tune.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>reg_metrics <span class="ot">&lt;-</span> <span class="fu">metric_set</span>(mae, rsq)</span>
-<span id="cb25-2"><a href="#cb25-2"></a></span>
-<span id="cb25-3"><a href="#cb25-3"></a><span class="fu">set.seed</span>(<span class="dv">12</span>)</span>
-<span id="cb25-4"><a href="#cb25-4"></a>init_res <span class="ot">&lt;-</span></span>
-<span id="cb25-5"><a href="#cb25-5"></a>  lgbm_wflow <span class="sc">%&gt;%</span></span>
-<span id="cb25-6"><a href="#cb25-6"></a>  <span class="fu">tune_grid</span>(</span>
-<span id="cb25-7"><a href="#cb25-7"></a>    <span class="at">resamples =</span> hotel_rs,</span>
-<span id="cb25-8"><a href="#cb25-8"></a>    <span class="at">grid =</span> <span class="fu">nrow</span>(lgbm_param) <span class="sc">+</span> <span class="dv">2</span>, <span class="co"># lgbm_param &lt;- workflow() |&gt; extract_parameter_set_dials()</span></span>
-<span id="cb25-9"><a href="#cb25-9"></a>    <span class="at">param_info =</span> lgbm_param,</span>
-<span id="cb25-10"><a href="#cb25-10"></a>    <span class="at">metrics =</span> reg_metrics</span>
-<span id="cb25-11"><a href="#cb25-11"></a>  )</span>
-<span id="cb25-12"><a href="#cb25-12"></a></span>
-<span id="cb25-13"><a href="#cb25-13"></a><span class="fu">show_best</span>(init_res, <span class="at">metric =</span> <span class="st">"mae"</span>)</span>
-<span id="cb25-14"><a href="#cb25-14"></a><span class="co">#&gt; # A tibble: 5 × 11</span></span>
-<span id="cb25-15"><a href="#cb25-15"></a><span class="co">#&gt;   trees min_n   learn_rate `agent hash` `company hash` .metric .estimator  mean     n std_err .config             </span></span>
-<span id="cb25-16"><a href="#cb25-16"></a><span class="co">#&gt;   &lt;int&gt; &lt;int&gt;        &lt;dbl&gt;        &lt;int&gt;          &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               </span></span>
-<span id="cb25-17"><a href="#cb25-17"></a><span class="co">#&gt; 1   390    10 0.0139                 13             62 mae     standard    11.3    10   0.202 Preprocessor1_Model1</span></span>
-<span id="cb25-18"><a href="#cb25-18"></a><span class="co">#&gt; 2   718    31 0.00112                72             25 mae     standard    29.0    10   0.335 Preprocessor4_Model1</span></span>
-<span id="cb25-19"><a href="#cb25-19"></a><span class="co">#&gt; 3  1236    22 0.0000261              11             17 mae     standard    51.8    10   0.416 Preprocessor7_Model1</span></span>
-<span id="cb25-20"><a href="#cb25-20"></a><span class="co">#&gt; 4  1044    25 0.00000832             34             12 mae     standard    52.8    10   0.424 Preprocessor5_Model1</span></span>
-<span id="cb25-21"><a href="#cb25-21"></a><span class="co">#&gt; 5  1599     7 0.0000000402          254            179 mae     standard    53.2    10   0.427 Preprocessor6_Model1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="footer">
-<p>tune | Learn more about <a href="https://tune.tidymodels.org/index.html">tune, a tidymodels package</a></p>
-</div>
-</section>
-<section id="bo-with-tune_bayes" class="slide level2">
-<h2>BO with tune_bayes() <img data-src="hexes/tune.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb26" data-code-line-numbers="4,6-8|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="fu">set.seed</span>(<span class="dv">15</span>)</span>
-<span id="cb26-2"><a href="#cb26-2"></a>lgbm_bayes_res <span class="ot">&lt;-</span></span>
-<span id="cb26-3"><a href="#cb26-3"></a>  lgbm_wflow <span class="sc">%&gt;%</span></span>
-<span id="cb26-4"><a href="#cb26-4"></a>  <span class="fu">tune_bayes</span>(</span>
-<span id="cb26-5"><a href="#cb26-5"></a>    <span class="at">resamples =</span> hotel_rs,</span>
-<span id="cb26-6"><a href="#cb26-6"></a>    <span class="at">initial =</span> init_res,     <span class="co"># &lt;- initial results</span></span>
-<span id="cb26-7"><a href="#cb26-7"></a>    <span class="at">iter =</span> <span class="dv">20</span>,</span>
-<span id="cb26-8"><a href="#cb26-8"></a>    <span class="at">param_info =</span> lgbm_param, <span class="co"># lgbm_param &lt;- workflow() |&gt; extract_parameter_set_dials()</span></span>
-<span id="cb26-9"><a href="#cb26-9"></a>    <span class="at">metrics =</span> reg_metrics</span>
-<span id="cb26-10"><a href="#cb26-10"></a>  )</span>
-<span id="cb26-11"><a href="#cb26-11"></a></span>
-<span id="cb26-12"><a href="#cb26-12"></a><span class="fu">show_best</span>(lgbm_bayes_res, <span class="at">metric =</span> <span class="st">"mae"</span>)</span>
-<span id="cb26-13"><a href="#cb26-13"></a><span class="co">#&gt; # A tibble: 5 × 12</span></span>
-<span id="cb26-14"><a href="#cb26-14"></a><span class="co">#&gt;   trees min_n learn_rate `agent hash` `company hash` .metric .estimator  mean     n std_err .config .iter</span></span>
-<span id="cb26-15"><a href="#cb26-15"></a><span class="co">#&gt;   &lt;int&gt; &lt;int&gt;      &lt;dbl&gt;        &lt;int&gt;          &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;int&gt;</span></span>
-<span id="cb26-16"><a href="#cb26-16"></a><span class="co">#&gt; 1  1769     2     0.0299          114            245 mae     standard    9.41    10   0.160 Iter13     13</span></span>
-<span id="cb26-17"><a href="#cb26-17"></a><span class="co">#&gt; 2  1969     3     0.0270          240             99 mae     standard    9.49    10   0.189 Iter11     11</span></span>
-<span id="cb26-18"><a href="#cb26-18"></a><span class="co">#&gt; 3  1780     5     0.0403           27             78 mae     standard    9.54    10   0.164 Iter17     17</span></span>
-<span id="cb26-19"><a href="#cb26-19"></a><span class="co">#&gt; 4  1454     3     0.0414          114             10 mae     standard    9.55    10   0.144 Iter10     10</span></span>
-<span id="cb26-20"><a href="#cb26-20"></a><span class="co">#&gt; 5  1253     2     0.0312          131            207 mae     standard    9.56    10   0.145 Iter19     19</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="footer">
-<p>tune | Learn more about <a href="https://tune.tidymodels.org/index.html">tune, a tidymodels package</a></p>
-</div>
-</section>
-<section id="plotting-bo-results" class="slide level2">
-<h2>Plotting BO Results <img data-src="hexes/tune.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "> <img data-src="hexes/ggplot2.png" class="absolute" style="top: -20px; right: 64px; width: 64px; height: 74.24px; "></h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="fu">autoplot</span>(lgbm_bayes_res, <span class="at">metric =</span> <span class="st">"mae"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div id="fig-539a35d47e664c97a50115a146a7f1bd-18" class="quarto-figure quarto-figure-center">
-<figure class="quarto-float quarto-float-fig">
-<div>
-<img data-src="images/bo_results.png" id="fig-539a35d47e664c97a50115a146a7f1bd-18">
-</div>
-</figure>
-</div>
-<div class="footer">
-<p>tune | Learn more about <a href="https://tune.tidymodels.org/index.html">tune, a tidymodels package</a></p>
-</div>
-</section>
-<section id="plotting-bo-results-1" class="slide level2">
-<h2>Plotting BO Results <img data-src="hexes/tune.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "> <img data-src="hexes/ggplot2.png" class="absolute" style="top: -20px; right: 64px; width: 64px; height: 74.24px; "></h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">autoplot</span>(lgbm_bayes_res, <span class="at">metric =</span> <span class="st">"mae"</span>, <span class="at">type =</span> <span class="st">"parameters"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div id="fig-539a35d47e664c97a50115a146a7f1bd-19" class="quarto-figure quarto-figure-center">
-<figure class="quarto-float quarto-float-fig">
-<div>
-<img data-src="images/bo_results_parameters.png" id="fig-539a35d47e664c97a50115a146a7f1bd-19">
-</div>
-</figure>
-</div>
-<div class="footer">
-<p>tune | Learn more about <a href="https://tune.tidymodels.org/index.html">tune, a tidymodels package</a></p>
-</div>
-</section></section>
-<section>
-<section id="other-highlights" class="title-slide slide level1 center">
-<h1>5. Other Highlights</h1>
+<section class="slide level2">
 
-</section>
-<section id="other-highlights-1" class="slide level2">
-<h2>Other Highlights</h2>
-<ul>
-<li><a href="https://docs.r-wasm.org/webr/latest/">WebR</a>: R in the web</li>
-<li><a href="https://posit-dev.github.io/r-shinylive/">shinylive</a>: serverless Shiny via WebR
-<ul>
-<li>Excellent <a href="https://github.com/RamiKrispin/shinylive-r">tutorial</a> by Rami Krispin</li>
-<li>Rami’s <a href="https://ramikrispin.github.io/shinylive-r/">shinylive example</a> on GitHub Pages</li>
-</ul></li>
-<li><a href="https://pkg.garrickadenbuie.com/epoxy/index.html">epoxy</a>: extra-strength {glue} for scripts, reports, and apps</li>
-<li><a href="https://agua.tidymodels.org/">agua</a>: tidymodels extension to fit, optimize, model via H2O</li>
-<li><a href="https://r4ds.hadley.nz/">R for Data Science 2e</a>: new <em>Import</em> set of chapters</li>
-<li><a href="https://r-pkgs.org/whole-game.html">R Packages 2e</a>: new <em>The Whole Game</em> chapter for devs</li>
-</ul>
-<div class="footer">
-<p>posit::conf(2023) | <a href="https://posit.co/blog/keynotes-and-talks-at-posit-conf-2023/">Watch keynote presentations and review talk materials</a></p>
-</div>
+<div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
+</div>
 </div>
 </section></section>
     </div>
   </div>
 
   <script>window.backupDefine = window.define; window.define = undefined;</script>
-  <script src="posit-conf-2023-recap_files/libs/revealjs/dist/reveal.js"></script>
+  <script src="index_files/libs/revealjs/dist/reveal.js"></script>
   <!-- reveal.js plugins -->
-  <script src="posit-conf-2023-recap_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
-  <script src="posit-conf-2023-recap_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
-  <script src="posit-conf-2023-recap_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
-  <script src="posit-conf-2023-recap_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
-  <script src="posit-conf-2023-recap_files/libs/revealjs/plugin/reveal-codewindow/codewindow.js"></script>
-  <script src="posit-conf-2023-recap_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  <script src="index_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="index_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="index_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="index_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="index_files/libs/revealjs/plugin/reveal-codewindow/codewindow.js"></script>
+  <script src="index_files/libs/revealjs/plugin/quarto-support/support.js"></script>
   
 
-  <script src="posit-conf-2023-recap_files/libs/revealjs/plugin/notes/notes.js"></script>
-  <script src="posit-conf-2023-recap_files/libs/revealjs/plugin/search/search.js"></script>
-  <script src="posit-conf-2023-recap_files/libs/revealjs/plugin/zoom/zoom.js"></script>
-  <script src="posit-conf-2023-recap_files/libs/revealjs/plugin/math/math.js"></script>
+  <script src="index_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="index_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="index_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="index_files/libs/revealjs/plugin/math/math.js"></script>
   <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
 
   <script>
