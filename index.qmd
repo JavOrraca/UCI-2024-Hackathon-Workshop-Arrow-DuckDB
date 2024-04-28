@@ -1098,7 +1098,7 @@ questions?
 
 . . .
 
-- One of the neater capabilities of this workshop was the geospatial mapping capabilities that combine Arrow, DuckDB, ggplot2, and SF
+- One of the neater capabilities of this workshop was the geospatial mapping capabilities that combine Arrow, ggplot2, and SF
 
 ::: footer
 posit::conf(2023) \| [Big Data in R with Arrow](https://posit-conf-2023.github.io/arrow/)
@@ -1109,6 +1109,16 @@ posit::conf(2023) \| [Big Data in R with Arrow](https://posit-conf-2023.github.i
 - The link below contains a script from the _Big Data in R with Arrow_ workshop that explores these packages and introduces an ultra-fast method for working with geospatial data and rendering maps
 <br>
 - Source: [Arrow_for_Spatial_Data.R](https://github.com/JavOrraca/UCI-2024-Hackathon-Workshop-Arrow-DuckDB/blob/main/Arrow_for_Spatial_Data.R)
+
+::: footer
+posit::conf(2023) \| [Big Data in R with Arrow](https://posit-conf-2023.github.io/arrow/)
+:::
+
+## Spatial Analysis
+
+- Example ggplot2 output, below:
+
+![](images/arrow_sf_output.png){fig-align="center"}
 
 ::: footer
 posit::conf(2023) \| [Big Data in R with Arrow](https://posit-conf-2023.github.io/arrow/)
