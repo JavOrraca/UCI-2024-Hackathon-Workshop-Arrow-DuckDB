@@ -25,9 +25,9 @@ knitr: true
 #| file: setup.R
 ```
 
-# 1. Data Manipulation
+# 1. ETL: Basics Recap
 
-## Clean ETL with R & Python
+## Basic ETL with R & Python
 
 ### R's `dplyr`
 
@@ -41,7 +41,7 @@ knitr: true
 [dplyr](https://dplyr.tidyverse.org/) for R \| [pandas](https://pandas.pydata.org/) for Python
 :::
 
-## Clean ETL with R & Python
+## Basic ETL with R & Python
 
 -   Both libraries are essential for data manipulation and are designed to be intuitive and performant
 
