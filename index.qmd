@@ -9,7 +9,7 @@ format:
     theme: [default, styling.scss]
     title-slide-attributes:
       data-background-image: images/SoCal_RUG_logo.png
-      data-background-size: 360px
+      data-background-size: 19%
       data-background-position: bottom 50px right 50px
       data-background-color: "#000000"
 eval: false
